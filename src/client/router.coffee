@@ -1,6 +1,8 @@
 Router.configure
   layoutTemplate: 'layout'
+  notFoundTemplate: 'notFound'
 
 Router.map ->
-  @route 'dinoPen', path: '/'
+  @route 'dinoPen', path: '/viewer'
+  @route 'texter', path: '/'
 
