@@ -1,0 +1,2 @@
+Tts = Npm.require('tts');
+
