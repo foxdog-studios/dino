@@ -1,5 +1,5 @@
 Package.describe({
-    summary: "Swift Text-to-speech"
+    summary: "Text-to-speech"
 });
 
 Npm.depends({
@@ -8,6 +8,6 @@ Npm.depends({
 
 Package.on_use(function (api) {
   api.add_files(['tts.js'], 'server');
-  api.export(['Tts'], 'server');
+  api.export(['TTS'], 'server');
 });
 
