@@ -1,3 +1,3 @@
-@Raps = new Meteor.Collection 'raps'
-@Sms = new Meteor.Collection 'sms'
+@Notes = new Meteor.Collection 'notes'
+@Utterances = new Meteor.Collection 'utterances'
 

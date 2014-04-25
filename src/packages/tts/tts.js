@@ -3,6 +3,10 @@ TTS = (function () {
 
   tts = {}
 
+  tts.makeWaveform = function (ssml) {
+    return _tts.createWaveform(ssml);
+  };
+
   tts.makeWav = function (bytes) {
     var bitsPerSample = 16;
     var bytesPerSample = bitsPerSample / 8;
@@ -113,10 +117,6 @@ TTS = (function () {
     }
     var end = i + 1;
     return bytes.slice(start, end);
-  };
-
-  tts.tts = function (ssml) {
-    return _tts.createWaveform(ssml);
   };
 
   return tts

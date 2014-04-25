@@ -10,13 +10,19 @@ setopt NO_UNSET
 
 repo=$(realpath -- ${0:h}/..)
 
+aur_packages=(
+    aseprite
+)
+
 global_node_packages=(
     meteorite
 )
 
 pacman_packages=(
+    cracklib
     git
     nodejs
+    python
     zsh
 )
 
@@ -25,9 +31,33 @@ pacman_packages=(
 # = Tasks                                                                      =
 # ==============================================================================
 
+function add_archlinuxfr_repo()
+{
+    if grep --quiet '\[archlinuxfr\]' /etc/pacman.conf; then
+        return
+    fi
+
+    sudo tee --append /etc/pacman.conf <<-'EOF'
+		[archlinuxfr]
+		Server = http://repo.archlinux.fr/$arch
+		SigLevel = Never
+	EOF
+}
+
 function install_pacman_packages()
 {
     sudo pacman --noconfirm --sync --needed --refresh $pacman_packages
+}
+
+function install_aur_packages()
+{
+    local package
+
+    for package in $aur_packages; do
+        if ! pacman -Q $package &> /dev/null; then
+            yaourt --noconfirm --sync $package
+        fi
+    done
 }
 
 function install_meteor()
@@ -45,6 +75,11 @@ function install_meteorite_packages()
     cd $repo/src
     mrt install
 )}
+
+function build_dictionary()
+{
+    $repo/scripts/build_dictionary.py /usr/share/dict/cracklib-small
+}
 
 function init_local()
 {
@@ -70,10 +105,13 @@ function init_local()
 # ==============================================================================
 
 tasks=(
+    add_archlinuxfr_repo
     install_pacman_packages
+    install_aur_packages
     install_meteor
     install_global_node_packages
     install_meteorite_packages
+    build_dictionary
     init_local
 )
 
@@ -87,7 +125,9 @@ function usage()
 		    setup.zsh [TASK...]
 
 		Tasks:
+		    add_archlinuxfr_repo
 		    install_pacman_packages
+		    install_aur_packages
 		    install_meteor
 		    install_global_node_packages
 		    install_meteorite_packages

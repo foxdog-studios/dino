@@ -1,0 +1,8 @@
+<template name="editor">
+  {{#if currentUser}}
+    {{> editorLoggedIn}}
+  {{else}}
+    {{> editorLoggingIn}}
+  {{/if}}
+</template>
+

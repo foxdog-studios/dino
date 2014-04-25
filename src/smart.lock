@@ -2,28 +2,13 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "audiocontext-monkeypatch": {
-        "git": "https://github.com/foxdog-studios/meteor-AudioContext-MonkeyPatch",
-        "branch": "master"
-      },
-      "iron-router": {},
-      "popcorn": {}
+      "iron-router": {}
     },
     "packages": {
-      "audiocontext-monkeypatch": {
-        "git": "https://github.com/foxdog-studios/meteor-AudioContext-MonkeyPatch",
-        "branch": "master",
-        "commit": "eb0e84a52ca076781afebdb1659f77411565cf8e"
-      },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
         "tag": "v0.7.1",
         "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
-      },
-      "popcorn": {
-        "git": "https://github.com/santihbc/meteor-popcorn-js.git",
-        "tag": "v0.1.0",
-        "commit": "20c5e438f0d1634f7c2ca3b0f78ac0bf63cb2e7c"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

@@ -1,0 +1,14 @@
+<template name="viewer">
+  <div id="viewer">
+    <p>
+      {{#each utterances}}
+        {{> utterance}}
+      {{/each}}
+    </p>
+  </div>
+</template>
+
+<template name="utterance">
+  <span>{{word}}</span>&#x20;
+</template>
+

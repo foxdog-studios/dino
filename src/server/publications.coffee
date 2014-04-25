@@ -1,3 +1,4 @@
-Meteor.publish 'sms', -> Sms.find {}
-Meteor.publish 'raps', -> Raps.find {}
+Meteor.publish 'utterances', ->
+  Utterances.find {},
+    order: [['createdAt', 'asc']]
 
