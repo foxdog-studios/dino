@@ -17,11 +17,16 @@ Template.editorLoggedIn.events
 
   'submit': (event, template) ->
     event.preventDefault()
-
     lyrics = getInputLyrics template
     Session.set 'submitting', true
     Methods.submitLyrics lyrics, (error, result) ->
       Session.set 'submitting', false
+      return if error?
+      template.find('#lyrics').value = ''
+      Meteor.users.update Meteor.userId(),
+        $unset:
+          'profile.lyrics': ''
+
 
 getInputLyrics = (template) ->
   template.find('#lyrics').value
