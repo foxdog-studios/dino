@@ -27,7 +27,6 @@ Template.editorLoggedIn.events
         $unset:
           'profile.lyrics': ''
 
-
 getInputLyrics = (template) ->
   template.find('#lyrics').value
 
