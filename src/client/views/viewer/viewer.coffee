@@ -22,18 +22,35 @@ Template.viewer.rendered = ->
         Session.set('currentTime', new Date().getTime())
         playing = Session.get 'playing'
         if playing
-          requestAnimationFrame(updateTime)
+          # Check at twice the bpm (nyquist's theorem)
+          timeout = 60 / (parseInt(Meteor.settings.public.bpm) * 2)
+          Meteor.setTimeout updateTime, timeout
       updateTime()
 
 
 Template.viewer.helpers
   utterances: ->
-    Utterances.find
-      playbackStart:
-        $gt: Session.get('currentTime')
+    currentTime = Session.get('currentTime')
+    Utterances.find()
 
   playing: ->
     Session.get 'playing'
+
+Template.utterance.helpers
+  currentUtterance: ->
+    currentTime = Session.get('currentTime')
+    nextUtterance = Utterances.findOne
+        playbackStart:
+          $lt: currentTime
+        playbackEnd:
+          $gt: currentTime
+      ,
+        sort:
+          playbackStart: 1
+    return unless nextUtterance?
+    if nextUtterance._id == @_id
+      'current-utterance'
+
 
 Template.viewer.destroyed = ->
   window.removeEventListener 'keyup', @_keyupHandler, false

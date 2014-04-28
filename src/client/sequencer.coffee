@@ -84,9 +84,13 @@ class ImplSequencer
     Utterances.find().forEach (utterance) =>
       if (buffer = @_buffers[utterance._id])
         start = sequence buffer, utterance.offset, utterance.duration
+      playbackStart = (@_ctxStart + start) * 1000
+      playbackEnd = playbackStart + utterance.duration * 1000
+
       Utterances.update utterance._id,
         $set:
-          playbackStart: (@_ctxStart + start) * 1000
+          playbackStart: playbackStart
+          playbackEnd: playbackEnd
 
     schedule
 
