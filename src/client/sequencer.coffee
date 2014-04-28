@@ -5,7 +5,6 @@ class ImplSequencer
     @_backingTrack = null
     @_buffers = {}
     @_ctx = new AudioContext
-    @_ctxStart = Date.now()
     @_enabled = false
     @_sources = []
 
@@ -75,6 +74,7 @@ class ImplSequencer
 
     schedule = utterances: []
 
+    @_ctxStart = new Date().getTime() / 1000 - @_ctx.currentTime
     if @_backingTrack
       start = sequence @_backingTrack, 0, @_backingTrack.duration
       schedule.backingTrack =
@@ -84,10 +84,9 @@ class ImplSequencer
     Utterances.find().forEach (utterance) =>
       if (buffer = @_buffers[utterance._id])
         start = sequence buffer, utterance.offset, utterance.duration
-      schedule.utterances.push
-        utteranceId: utterance._id
-        start: @_ctxStart + start
-        duration: utterance.duration
+      Utterances.update utterance._id,
+        $set:
+          playbackStart: (@_ctxStart + start) * 1000
 
     schedule
 
