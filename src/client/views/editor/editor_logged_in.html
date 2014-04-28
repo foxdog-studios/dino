@@ -1,20 +1,21 @@
 <template name="editorLoggedIn">
-  <div>
-    <p id="preview">{{preview}}</p>
-    <form>
-      <fieldset>
-        <label for="lyrics">Lyrics</label>
-        <input id="lyrics"
-               name="lyrics"
-               type="text"
-               title="Lyrics should be real words, lowercase, and without punctuation."
-               placeholder="Your lyrics here"
-               value="{{initialLyrics}}"
-               spellcheck="true"
-               autofocus>
-      </fieldset>
-      <button disabled={{sumbitDisabled}}>Submit</button>
-    </form>
-  </div>
+  <form>
+    <textarea
+        id="lyrics"
+        maxlength=140
+        rows="3"
+        placeholder="Type your lyrics here"
+        autofocus
+        disabled={{lyricsDisabled}}
+    >{{initialLyrics}}</textarea>
+    <button class="submit" disabled={{sumbitDisabled}}>
+      {{#if submitting}}
+        Sending lyrics&hellip;
+      {{else}}
+        Send lyrics
+      {{/if}}
+    </button>
+  </form>
 </template>
+
 
