@@ -2,12 +2,12 @@ Template.editorLoggedIn.helpers
   preview: ->
     makePreviewWords()?.join ' '
 
-  lyricsInvalid: ->
-    words = makePreviewWords()
-    not words? or words.length == 0
-
   initialLyrics: ->
     Deps.nonreactive getUserLyrics
+
+  sumbitDisabled: ->
+    words = makePreviewWords()
+    Session.equals('submitting', true) or not words? or words.length == 0
 
 Template.editorLoggedIn.events
   'input #lyrics': (event, template) ->
@@ -18,8 +18,14 @@ Template.editorLoggedIn.events
   'submit': (event, template) ->
     event.preventDefault()
     lyrics = getInputLyrics template
-    Methods.submitLyrics lyrics, (error, words) ->
-      console.log error, words
+    Session.set 'submitting', true
+    Methods.submitLyrics lyrics, (error, result) ->
+      Session.set 'submitting', false
+      return if error?
+      template.find('#lyrics').value = ''
+      Meteor.users.update Meteor.userId(),
+        $unset:
+          'profile.lyrics': ''
 
 getInputLyrics = (template) ->
   template.find('#lyrics').value
