@@ -15,9 +15,25 @@ Template.viewer.rendered = ->
         Session.set 'playing', !isPlaying
   window.addEventListener 'keyup', @_keyupHandler, false
 
+  Deps.autorun ->
+    playing = Session.get 'playing'
+    if playing
+      updateTime = ->
+        Session.set('currentTime', new Date().getTime())
+        playing = Session.get 'playing'
+        if playing
+          requestAnimationFrame(updateTime)
+      updateTime()
+
+
 Template.viewer.helpers
   utterances: ->
-    Utterances.find()
+    Utterances.find
+      playbackStart:
+        $gt: Session.get('currentTime')
+
+  playing: ->
+    Session.get 'playing'
 
 Template.viewer.destroyed = ->
   window.removeEventListener 'keyup', @_keyupHandler, false
