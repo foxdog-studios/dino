@@ -48,7 +48,7 @@ getUserLyrics = ->
 
 makePreviewWords = ->
   if (lyrics = getUserLyrics())
-    makeCleanWords lyrics
+    LyricsProcessor.makeCleanWords lyrics
 
 setCaretToPos = (input, pos) ->
   setSelectionRange input, pos, pos

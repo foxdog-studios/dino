@@ -3,7 +3,7 @@
     "bpm": 90,
     "melody": [
       "r_7",
-      "                                               B3_1/2  A3_1/2",
+      "                                                B3_1/2  A3_1/2",
       "B3_1/2  Gb3_1/2 D3_1/2  Gb3_1/2 B2              B3_1/2  A3_1/2",
       "B3_1/2  Gb3_1/2 D3_1/2  Gb3_1/2 B2              B3_1/2  Db4_1/2",
       "D4_1/2  Db4_1/2 D4_1/2  B3_1/2  Db4_1/2 B3_1/2  Db4_1/2 A3_1/2",
@@ -24,7 +24,12 @@
   },
   "public": {
     "backingTrackUrl": "/tracks/popcorn.wav",
-    "latency": 0.1
+    "latency": 0.1,
+    "lyrics": {
+      "alpha": true,
+      "dictionary": true,
+      "lower": true
+    }
   }
 }
 

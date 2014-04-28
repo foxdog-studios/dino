@@ -8,7 +8,7 @@ Meteor.methods
       throw new Meteor.Error 403, 'You must be logged in'
 
     # Validate the lyrics.
-    words = makeCleanWords lyrics
+    words = LyricsProcessor.makeCleanWords lyrics
     if _.isEmpty words
       throw new Meteor.Error 422, 'No valid lyrics supplied', lyrics
 
