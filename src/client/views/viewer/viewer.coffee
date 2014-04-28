@@ -12,8 +12,8 @@ Template.viewer.rendered = ->
           Sequencer.stop()
         else
           Sequencer.play()
-        Session.set 'playing', !isPlaying
-  window.addEventListener 'keyup', @_keyupHandler, false
+        Session.set 'playing', not isPlaying
+  window.addEventListener 'keydown', @_keyupHandler, false
 
   Deps.autorun ->
     playing = Session.get 'playing'
@@ -36,7 +36,7 @@ Template.viewer.helpers
     Session.get 'playing'
 
 Template.viewer.destroyed = ->
-  window.removeEventListener 'keyup', @_keyupHandler, false
+  window.removeEventListener 'keydown', @_keyupHandler, false
   delete @_keyupHandler
   Session.set 'playing'
   Sequencer.disable()
