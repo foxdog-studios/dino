@@ -12,6 +12,9 @@ Meteor.methods
     if _.isEmpty words
       throw new Meteor.Error 422, 'No valid lyrics supplied', lyrics
 
+    # Create an id that will identify this message in the utterances
+    messageId = Random.hexString(20)
+
     # Assign a note to each word
     cursor = Notes.find
       ownerId:
@@ -37,6 +40,7 @@ Meteor.methods
         duration: note.duration
         userId: userId
         createAt: Date.now()
+        messageId: messageId
 
       if Meteor.isServer
         ssml = """<prosody pitch="#{ note.pitch }Hz">#{ word }</prosody>"""
