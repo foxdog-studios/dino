@@ -20,7 +20,9 @@ Meteor.methods
       sort: [['offset', 'asc']]
       limit: words.length
 
-    _.zip(cursor.fetch(), words[...cursor.count()]).map (note_word) ->
+    note_words = _.zip(cursor.fetch(), words[...cursor.count()])
+
+    utteranceIds = note_words.map (note_word) ->
       [note, word] = note_word
 
       # Assign the note to the user.
@@ -41,4 +43,10 @@ Meteor.methods
         utterance.wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
 
       Utterances.insert utterance
+
+    Meteor.users.update userId,
+      $set:
+        'profile.utteranceIds': utteranceIds
+
+    return
 
