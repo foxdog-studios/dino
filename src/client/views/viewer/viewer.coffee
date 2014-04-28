@@ -31,7 +31,15 @@ Template.viewer.rendered = ->
 Template.viewer.helpers
   utterances: ->
     currentTime = Session.get('currentTime')
-    Utterances.find()
+    options =
+      sort:
+        playbackStart: 1
+    nextUtterance = Utterances.findOne
+        playbackEnd:
+          $gt: currentTime
+      , options
+    return unless nextUtterance?
+    Utterances.find(messageId: nextUtterance.messageId, options)
 
   playing: ->
     Session.get 'playing'
