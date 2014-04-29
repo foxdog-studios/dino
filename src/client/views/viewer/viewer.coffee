@@ -86,7 +86,7 @@ Template.viewer.helpers
     dino = DINO_SCHEMA[name]
     dino.progress = progress
     # Don't play at beginning
-    if progress > 0
+    if progress > 0 and not Session.get('playing')
       SFX.play(dino.sound)
     dino
 
