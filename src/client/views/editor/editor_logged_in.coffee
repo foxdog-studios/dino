@@ -1,3 +1,6 @@
+class KeyCodes
+  @Return = 13
+
 Template.editorLoggedIn.rendered = ->
   if (lyrics = getUserLyrics())
     Session.set 'characterCount', lyrics.length
@@ -37,6 +40,11 @@ Template.editorLoggedIn.events
     Meteor.users.update Meteor.userId(),
       $set:
         'profile.lyrics': lyrics
+
+  'keypress #lyrics': (event) ->
+    if event.which == KeyCodes.Return
+      event.preventDefault()
+      $('#lyrics').submit()
 
   'submit': (event, template) ->
     event.preventDefault()
