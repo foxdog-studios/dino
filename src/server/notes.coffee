@@ -1,6 +1,7 @@
 class ImplNotes
   constructor: ->
     @_isLocked = false
+    @_numNotes = 0
     @_remaining = []
 
   _aquire: ->
@@ -35,12 +36,17 @@ class ImplNotes
   reset: (notes) ->
     @_checkNotes notes
     @_withLock =>
+      @_numNotes = notes.length
       @_remaining = @_cloneNotes notes
 
   assign: (maxNotes) ->
     @_checkMaxNotes maxNotes
     @_withLock =>
       @_remaining.splice 0, maxNotes
+
+  numNotes: ->
+    @_withLock =>
+      @_numNotes
 
   numRemaining: ->
     @_withLock =>
@@ -57,6 +63,9 @@ class @Notes
 
   @assign: (maxNotes) ->
     getNotes().assign maxNotes
+
+  @numNotes: ->
+    getNotes().numNotes()
 
   @numRemaining: ->
     getNotes().numRemaining()
