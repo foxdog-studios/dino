@@ -1,3 +1,10 @@
+Meteor.startup ->
+  reset()
+
+Meteor.methods
+  reset: ->
+    reset()
+
 reset = ->
   # Teardown
   Meteor.users.remove {}
@@ -8,7 +15,4 @@ reset = ->
   Notes.reset parseMelody track.bpm, track.melody.join ' '
 
   return
-
-Meteor.methods
-  reset: reset
 
