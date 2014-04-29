@@ -47,6 +47,9 @@ Template.viewer.helpers
     return unless nextUtterance?
     Utterances.find(messageId: nextUtterance.messageId, options)
 
+  numberOfUtterances: ->
+    Utterances.find().count()
+
   playing: ->
     Session.get 'playing'
 
