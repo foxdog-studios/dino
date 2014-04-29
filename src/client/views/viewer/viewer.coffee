@@ -61,11 +61,14 @@ Template.viewer.helpers
     return unless nextUtterance?
     Utterances.find(messageId: nextUtterance.messageId, options)
 
+  info: ->
+    Meteor.settings.public.info
+
   numberOfUtterances: ->
     Utterances.find().count()
 
   progress: ->
-    getProgress()
+    getProgress().toFixed(1)
 
   playing: ->
     Session.get 'playing'
