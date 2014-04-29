@@ -1,18 +1,26 @@
 <template name="viewer">
+  {{#if playing}}
+    <div class="mask"></div>
+  {{/if}}
   <div id="viewer">
-    <p>
-      {{#if playing}}
-        Playing
-      {{else}}
-        Stopped
-      {{/if}}
-      {{numberOfUtterances}} utterances
-    </p>
-    <p class="message">
-      {{#each utterances}}
-        {{> utterance}}
-      {{/each}}
-    </p>
+    {{#unless playing}}
+      <p class="info">
+        {{info}}
+      </p>
+    {{/unless}}
+
+    {{#if playing}}
+      <p class="message">
+        {{#each utterances}}
+          {{> utterance}}
+        {{/each}}
+      </p>
+    {{else}}
+      <p class="progress">
+        {{progress}} %
+      </p>
+    {{/if}}
+    {{> dinoGrowing dino}}
   </div>
 </template>
 

@@ -1,8 +1,16 @@
+class KeyCodes
+  @Return = 13
+
 Template.editorLoggedIn.rendered = ->
   if (lyrics = getUserLyrics())
-    setCaretToPos @find('#lyrics'), lyrics.length
+    Session.set 'characterCount', lyrics.length
+  else
+    Session.set 'characterCount', 0
 
 Template.editorLoggedIn.helpers
+  characterCount: ->
+    Session.get 'characterCount'
+
   preview: ->
     makePreviewWords()?.join ' '
 
@@ -22,11 +30,21 @@ Template.editorLoggedIn.helpers
       words = makePreviewWords()
       not words or words.length == 0
 
+  overCount: ->
+    'error' if Session.get('characterCount') > 140
+
 Template.editorLoggedIn.events
   'input #lyrics': (event, template) ->
+    lyrics = getInputLyrics(template)
+    Session.set('characterCount', lyrics.length)
     Meteor.users.update Meteor.userId(),
       $set:
-        'profile.lyrics': getInputLyrics template
+        'profile.lyrics': lyrics
+
+  'keypress #lyrics': (event) ->
+    if event.which == KeyCodes.Return
+      event.preventDefault()
+      $('#lyrics').submit()
 
   'submit': (event, template) ->
     event.preventDefault()
@@ -38,6 +56,7 @@ Template.editorLoggedIn.events
         console.warn error
         return
       template.find('#lyrics').value = ''
+      Session.set('characterCount', 0)
       Meteor.users.update Meteor.userId(),
         $unset:
           'profile.lyrics': ''
@@ -51,9 +70,6 @@ getUserLyrics = ->
 makePreviewWords = ->
   if (lyrics = getUserLyrics())
     LyricsProcessor.makeCleanWords lyrics
-
-setCaretToPos = (input, pos) ->
-  setSelectionRange input, pos, pos
 
 setSelectionRange = (input, selectionStart, selectionEnd) ->
   if input.setSelectionRange

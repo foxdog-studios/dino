@@ -15,6 +15,14 @@
         Send lyrics
       {{/if}}
     </button>
+    <p class="character-count">
+      <span class="{{overCount}}">{{characterCount}}</span>/140
+    </p>
+    <div>
+      {{#if submitting}}
+        {{> spinner}}
+      {{/if}}
+    </div>
   </form>
 </template>
 
