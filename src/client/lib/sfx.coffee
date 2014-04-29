@@ -25,7 +25,7 @@ class AudioSample
 
   start: ->
     if @_ready
-      @_source.stop if @_source?
+      @_source.stop() if @_source?
       @_source = @_ctx.createBufferSource()
       @_source.buffer = @_buffer
       @_source.connect @_ctx.destination
@@ -54,6 +54,12 @@ class Sfx
     @melting  = create 'fat', loop: true
     @teenager = create 'kid'
     @final    = create 'final_form'
+
+  play: (name) ->
+    if @currentSound?
+      @currentSound.stop()
+    @currentSound = @[name]
+    @currentSound.start()
 
 @SFX = new Sfx
 

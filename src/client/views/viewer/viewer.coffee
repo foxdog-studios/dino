@@ -1,15 +1,15 @@
 DINO_SCHEMA =
   baby:
-    sound: SFX.baby
+    sound: 'baby'
     image: '/dino.gif'
   fat:
-    sound: SFX.fat
+    sound: 'fat'
     image: '/fatterdino.gif'
   teenager:
-    sound: SFX.teenager
+    sound: 'teenager'
     image: '/teenagedino.gif'
   final:
-    sound: SFX.final
+    sound: 'final'
     image: '/finaldino.gif'
 
 class @KeyCode
@@ -82,6 +82,9 @@ Template.viewer.helpers
       else 'final'
     dino = DINO_SCHEMA[name]
     dino.progress = progress
+    # Don't play at beginning
+    if progress > 0
+      SFX.play(dino.sound)
     dino
 
 @getProgress = ->
