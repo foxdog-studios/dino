@@ -3,7 +3,7 @@
     "latency": 0.1,
     "lyrics": {
       "alpha": true,
-      "dictionary": true,
+      "dictionary": false,
       "lower": true
     },
     "track": {
