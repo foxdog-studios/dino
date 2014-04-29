@@ -4,7 +4,7 @@ reset = ->
   Utterances.remove {}
 
   # Setup
-  track = Meteor.settings.track
+  track = Meteor.settings.public.track
   Notes.reset parseMelody track.bpm, track.melody.join ' '
 
   return

@@ -11,7 +11,7 @@ class ImplSequencer
     @_loadBackingTrack()
 
   _loadBackingTrack: ->
-    url = Meteor.settings.public.backingTrackUrl
+    url = Meteor.settings.public.track.backingTrackUrl
     request = new XMLHttpRequest
     request.open 'GET', url, true
     request.responseType = 'arraybuffer'

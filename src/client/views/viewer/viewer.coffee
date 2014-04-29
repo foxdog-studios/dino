@@ -1,5 +1,6 @@
 class @KeyCode
   @SPACE: 32
+  @R: 82
 
 Template.viewer.rendered = ->
   Sequencer.enable()
@@ -13,6 +14,9 @@ Template.viewer.rendered = ->
         else
           Sequencer.play()
         Session.set 'playing', not isPlaying
+      when KeyCode.R
+        event.preventDefault()
+        Methods.reset()
   window.addEventListener 'keydown', @_keyupHandler, false
 
   Deps.autorun ->
@@ -23,7 +27,7 @@ Template.viewer.rendered = ->
         playing = Session.get 'playing'
         if playing
           # Check at twice the bpm (nyquist's theorem)
-          timeout = 60 / (parseInt(Meteor.settings.public.bpm) * 2)
+          timeout = 60 / (Meteor.settings.public.track.bpm * 2)
           Meteor.setTimeout updateTime, timeout
       updateTime()
 
@@ -35,11 +39,16 @@ Template.viewer.helpers
       sort:
         playbackStart: 1
     nextUtterance = Utterances.findOne
+        playbackStart:
+          $lte: currentTime
         playbackEnd:
           $gt: currentTime
       , options
     return unless nextUtterance?
     Utterances.find(messageId: nextUtterance.messageId, options)
+
+  numberOfUtterances: ->
+    Utterances.find().count()
 
   playing: ->
     Session.get 'playing'
@@ -49,7 +58,7 @@ Template.utterance.helpers
     currentTime = Session.get('currentTime')
     nextUtterance = Utterances.findOne
         playbackStart:
-          $lt: currentTime
+          $lte: currentTime
         playbackEnd:
           $gt: currentTime
       ,
