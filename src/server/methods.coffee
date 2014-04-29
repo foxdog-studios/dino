@@ -16,22 +16,11 @@ Meteor.methods
     messageId = Random.hexString 20
 
     # Assign a note to each word
-    cursor = Notes.find
-      ownerId:
-        $exists: false
-    ,
-      sort: [['offset', 'asc']]
-      limit: words.length
-
-    note_words = _.zip cursor.fetch(), words[...cursor.count()]
+    notes = Notes.assign words.length
+    note_words = _.zip notes, words[...notes.length]
 
     utteranceIds = note_words.map (note_word) ->
       [note, word] = note_word
-
-      # Assign the note to the user.
-      Notes.update note._id,
-        $set:
-          ownerId: userId
 
       ssml = """<prosody pitch="#{ note.pitch }Hz">#{ word }</prosody>"""
       wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml

@@ -34,7 +34,9 @@ Template.editorLoggedIn.events
     Session.set 'submitting', true
     Methods.submitLyrics lyrics, (error, result) ->
       Session.set 'submitting', false
-      return if error?
+      if error?
+        console.warn error
+        return
       template.find('#lyrics').value = ''
       Meteor.users.update Meteor.userId(),
         $unset:
