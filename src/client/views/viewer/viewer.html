@@ -7,7 +7,7 @@
         Paused
       {{/if}}
     </p>
-    <p>
+    <p class="message">
       {{#each utterances}}
         {{> utterance}}
       {{/each}}
@@ -16,6 +16,6 @@
 </template>
 
 <template name="utterance">
-<span class="{{currentUtterance}}">{{word}}</span>&#x20;
+  <span class="{{currentUtterance}}">{{word}}</span>&#x20;
 </template>
 
