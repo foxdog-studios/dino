@@ -8,7 +8,7 @@
     },
     "track": {
       "backingTrackUrl": "/tracks/greensleeves.wav",
-      "bpm": 100,
+      "bpm": 150,
       "melody": [
         "r_2                                 A4_1   ",
         "C5_2                                D5_1   ",
