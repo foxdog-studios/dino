@@ -87,7 +87,7 @@ Template.viewer.helpers
     dino.progress = progress
     # Don't play at beginning
     if progress > 0
-      SFX.play(dino.sound)
+      getSfx().play(dino.sound)
     dino
 
 @getProgress = ->

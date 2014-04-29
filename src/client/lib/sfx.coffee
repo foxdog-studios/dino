@@ -1,10 +1,9 @@
 class AudioSample
-  constructor: (ctx, uri, options) ->
+  constructor: (uri, options) ->
     options = _.defaults (options or {}),
       loop: false
 
     @_autostart = false
-    @_ctx = ctx
     @_loop = options.loop
     @_ready = false
 
@@ -14,7 +13,7 @@ class AudioSample
 
     callback = (buffer) => @_setBuffer buffer
     request.onload = ->
-      ctx.decodeAudioData request.response, callback
+      getAudioContext().decodeAudioData request.response, callback
 
     request.send()
 
@@ -26,9 +25,9 @@ class AudioSample
   start: ->
     if @_ready
       @_source.stop() if @_source?
-      @_source = @_ctx.createBufferSource()
+      @_source = getAudioContext().createBufferSource()
       @_source.buffer = @_buffer
-      @_source.connect @_ctx.destination
+      @_source.connect getAudioContext().destination
       @_source.loop = @_loop
       @_source.start 0
       @_autostart = false
@@ -41,14 +40,10 @@ class AudioSample
     @_autostart = false
     delete @_source
 
-
 class Sfx
   constructor: ->
-    ctx = new AudioContext
-
     create = (name, options) ->
-      new AudioSample ctx, "/#{ name }.ogg", options
-
+      new AudioSample "/#{ name }.ogg", options
     @baby     = create 'baby'
     @fat      = create 'teenager'
     @melting  = create 'fat', loop: true
@@ -61,5 +56,8 @@ class Sfx
     @currentSound = @[name]
     @currentSound.start()
 
-@SFX = new Sfx
+sfx = null
+
+@getSfx = ->
+  sfx ||= new Sfx
 
