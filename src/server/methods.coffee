@@ -12,8 +12,8 @@ Meteor.methods
     if _.isEmpty words
       throw new Meteor.Error 422, 'No valid lyrics supplied', lyrics
 
-    # Create an id that will identify this message in the utterances
-    messageId = Random.hexString(20)
+    # Identifies the lyrics this utterance comes from.
+    messageId = Random.hexString 20
 
     # Assign a note to each word
     cursor = Notes.find
@@ -23,7 +23,7 @@ Meteor.methods
       sort: [['offset', 'asc']]
       limit: words.length
 
-    note_words = _.zip(cursor.fetch(), words[...cursor.count()])
+    note_words = _.zip cursor.fetch(), words[...cursor.count()]
 
     utteranceIds = note_words.map (note_word) ->
       [note, word] = note_word
@@ -33,20 +33,18 @@ Meteor.methods
         $set:
           ownerId: userId
 
-      utterance =
+      ssml = """<prosody pitch="#{ note.pitch }Hz">#{ word }</prosody>"""
+      wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
+
+      Utterances.insert
         word: word
         pitch: note.pitch
         offset: note.offset
         duration: note.duration
+        wav: wav
         userId: userId
         createAt: Date.now()
         messageId: messageId
-
-      if Meteor.isServer
-        ssml = """<prosody pitch="#{ note.pitch }Hz">#{ word }</prosody>"""
-        utterance.wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
-
-      Utterances.insert utterance
 
     Meteor.users.update userId,
       $set:
