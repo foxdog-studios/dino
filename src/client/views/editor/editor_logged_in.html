@@ -8,6 +8,9 @@
         autofocus
         disabled={{lyricsDisabled}}
     >{{initialLyrics}}</textarea>
+    <p class="character-count">
+      <span class="{{overCount}}">{{characterCount}}</span>/140
+    </p>
     <button class="submit" disabled={{sumbitDisabled}}>
       {{#if submitting}}
         Sending lyrics&hellip;
@@ -15,6 +18,11 @@
         Send lyrics
       {{/if}}
     </button>
+    <div>
+      {{#if submitting}}
+        {{> spinner}}
+      {{/if}}
+    </div>
   </form>
 </template>
 
