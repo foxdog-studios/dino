@@ -1,4 +1,4 @@
-class ImplNotes
+class ImplMelody
   constructor: ->
     @_isLocked = false
     @_numNotes = 0
@@ -20,13 +20,6 @@ class ImplNotes
     @_release()
     result
 
-  _checkNotes: (notes) ->
-    check notes, [
-      pitch: Number
-      offset: Number
-      duration: Number
-    ]
-
   _checkMaxNotes: (maxNotes) ->
     check maxNotes, Number
 
@@ -34,7 +27,6 @@ class ImplNotes
     _.clone notes
 
   reset: (notes) ->
-    @_checkNotes notes
     @_withLock =>
       @_numNotes = notes.length
       @_remaining = @_cloneNotes notes
@@ -52,21 +44,44 @@ class ImplNotes
     @_withLock =>
       @_remaining.length
 
-notes = null
+  transpose: (semitones) ->
+    check semitones, Number
+    @_withLock =>
+      @_remaining = for note in @_remaining
+        note.transpose semitones
 
-getNotes = ->
-  notes ||= new ImplNotes
+melody = null
 
-class @Notes
+getMelody = ->
+  melody ||= new ImplMelody
+
+class @Melody
   @reset: (notes) ->
-    getNotes().reset notes
+    getMelody().reset notes
 
   @assign: (maxNotes) ->
-    getNotes().assign maxNotes
+    getMelody().assign maxNotes
 
   @numNotes: ->
-    getNotes().numNotes()
+    getMelody().numNotes()
 
   @numRemaining: ->
-    getNotes().numRemaining()
+    getMelody().numRemaining()
+
+  @transpose: (semitones) ->
+    getMelody().transpose semitones
+
+@parseMelody = (bpm, rawMelody) ->
+  # Seconds per beat
+  nextStart = 0
+
+  # Leading or trailing whitespace creates an empty raw notes when
+  # split.
+  rawMelody = rawMelody.trim()
+
+  for rawNote in rawMelody.split /\s+/
+    note = NoteParser.parse(rawNote).schedule bpm, nextStart
+    nextStart += note.getDuration()
+    continue if note.isRest()
+    note
 

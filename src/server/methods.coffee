@@ -16,20 +16,21 @@ Meteor.methods
     messageId = Random.hexString 20
 
     # Assign a note to each word
-    notes = Notes.assign words.length
+    notes = Melody.assign words.length
     note_words = _.zip notes, words[...notes.length]
 
     utteranceIds = note_words.map (note_word) ->
       [note, word] = note_word
 
-      ssml = """<prosody pitch="#{ note.pitch }Hz">#{ word }</prosody>"""
+      frequency = note.getFrequency()
+      ssml = """<prosody pitch="#{ frequency }Hz">#{ word }</prosody>"""
       wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
 
       Utterances.insert
         word: word
-        pitch: note.pitch
-        offset: note.offset
-        duration: note.duration
+        pitch: frequency
+        offset: note.getStart()
+        duration: note.getDuration()
         wav: wav
         userId: userId
         createAt: Date.now()

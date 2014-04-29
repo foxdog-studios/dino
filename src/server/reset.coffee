@@ -12,7 +12,8 @@ reset = ->
 
   # Setup
   track = Meteor.settings.public.track
-  Notes.reset parseMelody track.bpm, track.melody.join ' '
+  Melody.reset parseMelody track.bpm, track.melody.join ' '
+  Melody.transpose track?.transpose || 0
 
   return
 
