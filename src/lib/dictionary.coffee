@@ -5,7 +5,8 @@ class Dictionary
 
   _make: (rawDictionary) ->
     for word in rawDictionary.split '\n'
-      @_words[word] = true
+      if word.length > 0
+        @_words[word] = true
     return
 
   contains: (word) ->
