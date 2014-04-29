@@ -24,4 +24,5 @@ Router.map ->
 
     waitOn: ->
       Meteor.subscribe 'utterances'
+      Meteor.subscribe 'progress'
 
