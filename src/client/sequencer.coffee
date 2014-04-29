@@ -2,23 +2,10 @@ LATENCY = Meteor.settings.latency || 1
 
 class ImplSequencer
   constructor: ->
-    @_backingTrack = null
     @_buffers = {}
     @_ctx = new AudioContext
     @_enabled = false
     @_sources = []
-
-    @_loadBackingTrack()
-
-  _loadBackingTrack: ->
-    url = Meteor.settings.public.track.backingTrackUrl
-    request = new XMLHttpRequest
-    request.open 'GET', url, true
-    request.responseType = 'arraybuffer'
-    request.onload = =>
-      @_ctx.decodeAudioData request.response, (buffer) =>
-        @_backingTrack = buffer
-    request.send()
 
   _added: (utterance) ->
     @_buffers[utterance._id] = null
@@ -72,14 +59,7 @@ class ImplSequencer
       @_sources.push source
       start
 
-    schedule = utterances: []
-
     @_ctxStart = new Date().getTime() / 1000 - @_ctx.currentTime
-    if @_backingTrack
-      start = sequence @_backingTrack, 0, @_backingTrack.duration
-      schedule.backingTrack =
-        start: @_ctxStart + start
-        duration: @_backingTrack.duration
 
     Utterances.find().forEach (utterance) =>
       if (buffer = @_buffers[utterance._id])
@@ -92,7 +72,6 @@ class ImplSequencer
           playbackStart: playbackStart
           playbackEnd: playbackEnd
 
-    schedule
 
   stop: ->
     throw 'Sequencer is disabled' unless @_enabled
@@ -104,8 +83,7 @@ class ImplSequencer
 sequencer = null
 
 getSequencer = ->
-  sequencer = new ImplSequencer unless sequencer
-  sequencer
+  sequencer ||= new ImplSequencer
 
 class @Sequencer
   @enable: ->
