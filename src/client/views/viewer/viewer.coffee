@@ -1,5 +1,6 @@
 class @KeyCode
   @SPACE: 32
+  @R: 82
 
 Template.viewer.rendered = ->
   Sequencer.enable()
@@ -13,6 +14,9 @@ Template.viewer.rendered = ->
         else
           Sequencer.play()
         Session.set 'playing', not isPlaying
+      when KeyCode.R
+        event.preventDefault()
+        Methods.reset()
   window.addEventListener 'keydown', @_keyupHandler, false
 
   Deps.autorun ->
@@ -35,6 +39,8 @@ Template.viewer.helpers
       sort:
         playbackStart: 1
     nextUtterance = Utterances.findOne
+        playbackStart:
+          $lte: currentTime
         playbackEnd:
           $gt: currentTime
       , options
@@ -49,7 +55,7 @@ Template.utterance.helpers
     currentTime = Session.get('currentTime')
     nextUtterance = Utterances.findOne
         playbackStart:
-          $lt: currentTime
+          $lte: currentTime
         playbackEnd:
           $gt: currentTime
       ,
