@@ -23,8 +23,6 @@ pacman_packages=(
     git
     nodejs
     python
-    timidity++
-    timidity-freepats
     zsh
 )
 
@@ -78,16 +76,6 @@ function install_meteorite_packages()
     mrt install
 )}
 
-function copy_timidity_config()
-{
-    sudo cp /etc/timidity++/timidity-freepats.cfg /etc/timidity++/timidity.cfg
-}
-
-function render_wavs()
-{
-    $repo/scripts/render_wavs.zsh
-}
-
 function build_dictionary()
 {
     $repo/scripts/build_dictionary.py /usr/share/dict/cracklib-small
@@ -123,8 +111,6 @@ tasks=(
     install_meteor
     install_global_node_packages
     install_meteorite_packages
-    copy_timidity_config
-    render_wavs
     build_dictionary
     init_local
 )
@@ -145,8 +131,6 @@ function usage()
 		    install_meteor
 		    install_global_node_packages
 		    install_meteorite_packages
-		    copy_timidity_config
-		    render_wavs
 		    build_dictionary
 		    init_local
 	EOF

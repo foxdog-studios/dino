@@ -1,5 +1,3 @@
-noteRegex = /([abcdefg]b?[012345678]|r)(?:_(\d+)(?:\/(\d+))?)?/i
-
 Pitches =
   c0: 16.35
   cb0: 17.32
@@ -102,10 +100,16 @@ Pitches =
   d8: 4698.64
   eb8: 4978.03
 
+noteRegex = /([abcdefg]b?[012345678]|r)(?:_(\d+)(?:\/(\d+))?)?/i
+
 @parseMelody = (bpm, rawMelody) ->
   # Seconds per beat
   spb = 60 / bpm
   nextOffset = 0
+
+  # Leading or trailing whitespace creates an empty raw notes when
+  # split.
+  rawMelody = rawMelody.trim()
 
   for rawNote in rawMelody.split /\s+/
     # Parse note
