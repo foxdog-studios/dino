@@ -1,7 +1,8 @@
 class @NoiseSynth
-  @GAIN = 3.5
+  @GAIN = 1
+  @NOISE_GAIN = 3.5
 
-  constructor: (gain=NoiseSynth.GAIN) ->
+  constructor: (gain=NoiseSynth.GAIN, noiseGain=NoiseSynth.NOISE_GAIN) ->
     lastOut = 0.0
     @ctx = getAudioContext()
     # Fill 2 seconds of noise
@@ -12,7 +13,10 @@ class @NoiseSynth
       white = Math.random() * 2 - 1
       output[i] = (lastOut + (0.02 * white)) / 1.02
       lastOut = output[i]
-      output[i] *= gain
+      output[i] *= noiseGain
+    @gainNode = @ctx.createGain()
+    @gainNode.gain.value = gain
+    @gainNode.connect @ctx.destination
 
   start: (start, length) ->
     check start, Number
@@ -22,5 +26,5 @@ class @NoiseSynth
     @node.loop = true
     @node.start start
     @node.stop start + length
-    @node.connect @ctx.destination
+    @node.connect @gainNode
 

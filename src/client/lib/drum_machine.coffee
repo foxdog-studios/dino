@@ -1,9 +1,10 @@
 class @DrumMachine
-  constructor: (pattern) ->
+  constructor: (pattern, gain) ->
     check pattern, [[Match.Integer]]
+    check gain, Number
     @setPattern(pattern)
-    @kickSynth = new NoiseSynth()
-    @snareSynth = new NoiseSynth(1)
+    @kickSynth = new NoiseSynth(gain)
+    @snareSynth = new NoiseSynth(gain, 1)
 
   setPattern: (pattern) ->
     check pattern, [[Match.Integer]]

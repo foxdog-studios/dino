@@ -5,13 +5,13 @@ Template.utterance.helpers
     cursor = Utterances.find
       _id: @_id
       playbackStart:
-        $lte: nextBeat.time
+        $lte: nextBeat.now
       playbackEnd:
-        $gt: nextBeat.time
+        $gt: nextBeat.now
     ,
       sort:
         playbackStart: 1
 
-    if cursor.count()
+    if cursor.count() > 0
       'current-utterance'
 

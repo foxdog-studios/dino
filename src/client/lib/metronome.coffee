@@ -1,5 +1,5 @@
 class Beat
-  constructor: (@time, @beatsSinceStart, @beatsInBar, @secondsPerBeat) ->
+  constructor: (@time, @beatsSinceStart, @beatsInBar, @secondsPerBeat, @now) ->
 
   getBeatOfBar: ->
     @beatsSinceStart % Meteor.settings.public.track.beatsPerBar
@@ -9,10 +9,11 @@ class Beat
     if currentBeatOfBar > beatOfBar
       beatOfBar += @beatsInBar
     difference = beatOfBar - currentBeatOfBar
-    console.log difference
-    beatTime = @time + difference * @secondsPerBeat
+    differenceSeconds = difference * @secondsPerBeat
+    beatTime = @time + differenceSeconds
     beatsSinceStart = @beatsSinceStart + difference
-    new Beat(beatTime, beatsSinceStart, @beatsInBar, @secondsPerBeat)
+    new Beat(beatTime, beatsSinceStart, @beatsInBar, @secondsPerBeat,
+             @now + differenceSeconds)
 
 class ImplMetronome
   constructor: ->
@@ -54,7 +55,8 @@ class ImplMetronome
     @_nextBeat = new Beat(nextBeatTime,
                           @_getNextBeat(),
                           @_getBeatsInBar(),
-                          @_getSecondsPerBeat())
+                          @_getSecondsPerBeat(),
+                          @_getCurrentTime())
     @_nextBeatDependency.changed()
 
   _isEnabled: ->

@@ -16,7 +16,8 @@ Template.viewer.rendered = ->
   Metronome.enable()
   Sequencer.enable()
 
-  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern)
+  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern,
+                                Meteor.settings.public.track.drumVolume)
 
   Session.set 'playing', false
   @_keyupHandler = (event) ->
@@ -89,9 +90,9 @@ getNextUtterance = ->
   nextBeat = Metronome.getNextBeat()
   Utterances.findOne
     playbackStart:
-      $lte: nextBeat.time
+      $lte: nextBeat.now
     playbackEnd:
-      $gt: nextBeat.time
+      $gt: nextBeat.now
   ,
     sort:
       playbackStart: 1
