@@ -2,10 +2,17 @@ class AudioSample
   constructor: (uri, options) ->
     options = _.defaults (options or {}),
       loop: false
+      autoStop: true
+      gain: 1
 
-    @_autostart = false
+    @_autoStart = false
     @_loop = options.loop
+    @_autoStop = options.autoStop
     @_ready = false
+
+    @gain = getAudioContext().createGain()
+    @gain.gain.value = options.gain
+    @gain.connect getAudioContext().destination
 
     request = new XMLHttpRequest
     request.open 'GET', uri, true
@@ -22,33 +29,47 @@ class AudioSample
     @_ready = true
     @start() if @_autostart
 
-  start: ->
+  start: (start=0) ->
     if @_ready
-      @_source.stop() if @_source?
+      if @autoStop
+        @_source.stop() if @_source?
       @_source = getAudioContext().createBufferSource()
       @_source.buffer = @_buffer
-      @_source.connect getAudioContext().destination
+      @_source.connect @gain
       @_source.loop = @_loop
-      @_source.start 0
-      @_autostart = false
+      @_source.start start
+      @_autoStart = false
     else
-      @_autostart = true
+      @_autoStart = true
 
   stop: ->
     return unless @_source?
     @_source.stop()
-    @_autostart = false
+    @_autoStart = false
     delete @_source
 
 class Sfx
   constructor: ->
     create = (name, options) ->
       new AudioSample "/#{ name }.ogg", options
-    @baby     = create 'baby'
-    @fat      = create 'teenager'
-    @melting  = create 'fat', loop: true
-    @teenager = create 'kid'
-    @final    = create 'final_form'
+    dinoVolume = Meteor.settings.public.dinoVolume
+    @baby     = create 'baby',
+      gain: dinoVolume
+    @fat      = create 'teenager',
+      gain: dinoVolume
+    @melting  = create 'fat',
+      gain: dinoVolume
+      loop: true
+    @teenager = create 'kid',
+      gain: dinoVolume
+    @final    = create 'final_form',
+      gain: dinoVolume
+    @bongo    = create 'bongo',
+      autoStop: false
+      gain: Meteor.settings.public.track.drumKickVolume
+    @bongoMid = create 'bongo-mid',
+      autoStop: false
+      gain: Meteor.settings.public.track.drumSnareVolume
 
   play: (name) ->
     if @currentSound?

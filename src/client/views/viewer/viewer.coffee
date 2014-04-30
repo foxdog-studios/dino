@@ -16,8 +16,7 @@ Template.viewer.rendered = ->
   Metronome.enable()
   Sequencer.enable()
 
-  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern,
-                                Meteor.settings.public.track.drumVolume)
+  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern)
 
   Session.set 'playing', false
   @_keyupHandler = (event) ->

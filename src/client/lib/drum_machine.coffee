@@ -1,10 +1,9 @@
 class @DrumMachine
-  constructor: (pattern, gain) ->
+  constructor: (pattern) ->
     check pattern, [[Match.Integer]]
-    check gain, Number
     @setPattern(pattern)
-    @kickSynth = new NoiseSynth(gain)
-    @snareSynth = new NoiseSynth(gain, 1)
+    @bongo = getSfx().bongo
+    @bongoMid = getSfx().bongoMid
 
   setPattern: (pattern) ->
     check pattern, [[Match.Integer]]
@@ -23,12 +22,9 @@ class @DrumMachine
     for track in @pattern
       beatOfBar = nextBeat.getBeatOfBar()
       state = track[beatOfBar]
-      synth = switch state
+      switch state
         when 1
-          @kickSynth
+          @bongo.start(nextBeat.time)
         when 2
-          @snareSynth
-      if synth?
-        synth.start(nextBeat.time, 1 / 10)
-
+          @bongoMid.start(nextBeat.time)
 
