@@ -9,6 +9,12 @@
     },
     "track": {
       "bpm": 150,
+      "beatsPerBar": 3,
+      "drumPattern": [
+        [1, 0, 0],
+        [0, 2, 2]
+      ],
+      "startingBeat": 0,
       "melody": [
         "r_2                                 A4_1   ",
         "C5_2                                D5_1   ",
@@ -44,7 +50,7 @@
         "A4_3                                       ",
         "A4_3                                       "
       ],
-      "transpose": -12
+      "transpose": 0
     }
   }
 }

@@ -1,16 +1,61 @@
+class Beat
+  constructor: (@time, @beatsSinceStart, @beatsInBar, @secondsPerBeat) ->
+
+  getBeatOfBar: ->
+    @beatsSinceStart % Meteor.settings.public.track.beatsPerBar
+
+  getNextBeatAt: (beatOfBar) ->
+    currentBeatOfBar = @getBeatOfBar()
+    if currentBeatOfBar > beatOfBar
+      beatOfBar += @beatsInBar
+    difference = beatOfBar - currentBeatOfBar
+    console.log difference
+    beatTime = @time + difference * @secondsPerBeat
+    beatsSinceStart = @beatsSinceStart + difference
+    new Beat(beatTime, beatsSinceStart, @beatsInBar, @secondsPerBeat)
+
 class ImplMetronome
   constructor: ->
-    @_callback = _.bind @_updateCurrentTime, this
-    @_currentTimeDependency = new Deps.Dependency
-    @_currentTime = null
+    @_callback = _.bind @_updateNextBeat, this
+    @_nextBeatDependency = new Deps.Dependency
+    @_nextBeat = null
 
   _getInterval: ->
     # Two updates per beat (Nyquist's theorem).
-    (60 * 1000) / (Meteor.settings.public.track.bpm * 2)
+    (60 * 1000) / (@_getBpm() * 2)
 
-  _updateCurrentTime: ->
-    @_currentTime = Date.now()
-    @_currentTimeDependency.changed()
+  _getCurrentTime: ->
+    getAudioContext().currentTime
+
+  _getBpm: ->
+    Meteor.settings.public.track.bpm
+
+  _getBeatsInBar: ->
+    Meteor.settings.public.track.beatsPerBar
+
+  _getSecondsPerBeat: ->
+    60 / @_getBpm()
+
+  _getSecondsSinceStart: ->
+    @_getCurrentTime()
+
+  _getBeatsSinceStart: ->
+    @_getSecondsSinceStart() / @_getSecondsPerBeat()
+
+  _getNextBeat: ->
+    Math.ceil(@_getBeatsSinceStart())
+
+  _getNextBeatTime: ->
+    @_getNextBeat() * @_getSecondsPerBeat()
+
+  _updateNextBeat: ->
+    nextBeatTime = @_getNextBeatTime()
+    return if @_nextBeat?.time == nextBeatTime
+    @_nextBeat = new Beat(nextBeatTime,
+                          @_getNextBeat(),
+                          @_getBeatsInBar(),
+                          @_getSecondsPerBeat())
+    @_nextBeatDependency.changed()
 
   _isEnabled: ->
     @_timeoutId?
@@ -20,6 +65,7 @@ class ImplMetronome
 
   enable: ->
     return if @_isEnabled()
+    @_updateNextBeat()
     @_timeoutId = Meteor.setInterval @_callback, @_getInterval()
     return
 
@@ -29,10 +75,13 @@ class ImplMetronome
     delete @_timeoutId
     return
 
-  getCurrentTime: ->
+  _assertEnabled: ->
     throw 'Metronome is disabled' if @_isDisabled()
-    @_currentTimeDependency.depend()
-    @_currentTime
+
+  getNextBeat: ->
+    @_assertEnabled()
+    @_nextBeatDependency.depend()
+    @_nextBeat
 
 metronome = null
 
@@ -46,6 +95,6 @@ class @Metronome
   @disable: ->
     getMetronome().disable()
 
-  @getCurrentTime: ->
-    getMetronome().getCurrentTime()
+  @getNextBeat: ->
+    getMetronome().getNextBeat()
 

@@ -16,6 +16,8 @@ Template.viewer.rendered = ->
   Metronome.enable()
   Sequencer.enable()
 
+  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern)
+
   Session.set 'playing', false
   @_keyupHandler = (event) ->
     switch event.keyCode
@@ -26,6 +28,13 @@ Template.viewer.rendered = ->
         else
           Sequencer.play()
         Session.set 'playing', not isPlaying
+      when KeyCode.D
+        event.preventDefault()
+        if (isDrumming = Session.get 'drumming')
+          drumMachine.stop()
+        else
+          drumMachine.start()
+        Session.set 'drumming', not isDrumming
       when KeyCode.R
         event.preventDefault()
         Methods.reset()
@@ -77,12 +86,12 @@ Template.viewer.destroyed = ->
   Metronome.disable()
 
 getNextUtterance = ->
-  currentTime = Metronome.getCurrentTime()
+  nextBeat = Metronome.getNextBeat()
   Utterances.findOne
     playbackStart:
-      $lte: currentTime
+      $lte: nextBeat.time
     playbackEnd:
-      $gt: currentTime
+      $gt: nextBeat.time
   ,
     sort:
       playbackStart: 1
