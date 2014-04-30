@@ -3,7 +3,7 @@ LATENCY = Meteor.settings.latency || 1
 class ImplSequencer
   constructor: ->
     @_buffers = {}
-    @_ctx = new AudioContext
+    @_ctx = getAudioContext()
     @_enabled = false
     @_sources = []
 
@@ -48,30 +48,22 @@ class ImplSequencer
     throw 'Sequencer is disabled' unless @_enabled
 
     @stop()
-    trackStart = @_ctx.currentTime + LATENCY
-
-    sequence = (buffer, offset, duration) =>
-      source = @_ctx.createBufferSource()
-      source.buffer = buffer
-      source.connect @_ctx.destination
-      start = trackStart + offset
-      source.start start, 0, duration
-      @_sources.push source
-      start
-
-    @_ctxStart = new Date().getTime() / 1000 - @_ctx.currentTime
+    nextBeat = Metronome.getNextBeat().getNextBeatAt(
+      Meteor.settings.public.track.startingBeat)
 
     Utterances.find().forEach (utterance) =>
+      start = nextBeat.time + utterance.offset
       if (buffer = @_buffers[utterance._id])
-        start = sequence buffer, utterance.offset, utterance.duration
-      playbackStart = (@_ctxStart + start) * 1000
-      playbackEnd = playbackStart + utterance.duration * 1000
+        source = @_ctx.createBufferSource()
+        source.buffer = buffer
+        source.connect @_ctx.destination
+        source.start start, 0, utterance.duration
+        @_sources.push source
 
       Utterances.update utterance._id,
         $set:
-          playbackStart: playbackStart
-          playbackEnd: playbackEnd
-
+          playbackStart: start
+          playbackEnd: start + utterance.duration
 
   stop: ->
     throw 'Sequencer is disabled' unless @_enabled

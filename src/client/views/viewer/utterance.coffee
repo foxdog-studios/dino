@@ -1,13 +1,13 @@
 Template.utterance.helpers
   class: ->
-    currentTime = Metronome.getCurrentTime()
+    nextBeat = Metronome.getNextBeat()
 
     cursor = Utterances.find
       _id: @_id
       playbackStart:
-        $lte: currentTime
+        $lte: nextBeat.time
       playbackEnd:
-        $gt: currentTime
+        $gt: nextBeat.time
     ,
       sort:
         playbackStart: 1
