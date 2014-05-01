@@ -1,22 +1,20 @@
 DINO_SCHEMA =
   baby:
     sound: 'baby'
-    image: '/dino.gif'
+    image: '/baby.gif'
+  kid:
+    sound: 'kid'
+    image: '/kid.gif'
   fat:
     sound: 'fat'
-    image: '/fatterdino.gif'
-  teenager:
-    sound: 'teenager'
-    image: '/teenagedino.gif'
+    image: '/fat.gif'
   final:
     sound: 'final'
-    image: '/finaldino.gif'
+    image: '/final.gif'
 
 Template.viewer.rendered = ->
   Metronome.enable()
   Sequencer.enable()
-
-  drumMachine = new DrumMachine(Meteor.settings.public.track.drumPattern)
 
   Session.set 'playing', false
   @_keyupHandler = (event) ->
@@ -28,13 +26,6 @@ Template.viewer.rendered = ->
         else
           Sequencer.play()
         Session.set 'playing', not isPlaying
-      when KeyCodes.D
-        event.preventDefault()
-        if (isDrumming = Session.get 'drumming')
-          drumMachine.stop()
-        else
-          drumMachine.start()
-        Session.set 'drumming', not isDrumming
       when KeyCodes.R
         event.preventDefault()
         Methods.reset()
@@ -68,7 +59,7 @@ Template.viewer.helpers
     progress = getProgress()
     name = switch
       when progress <  33 then 'baby'
-      when progress <  66 then 'teenager'
+      when progress <  66 then 'kid'
       when progress < 100 then 'fat'
       else 'final'
     dino = DINO_SCHEMA[name]

@@ -1,18 +1,19 @@
 class AudioSample
   constructor: (uri, options) ->
     options = _.defaults (options or {}),
-      loop: false
-      autoStop: true
+      autoStart: false
+      autoStop: false
       gain: 1
+      loop: false
 
     @_autoStart = false
-    @_loop = options.loop
     @_autoStop = options.autoStop
+    @_loop = options.loop
     @_ready = false
 
-    @gain = getAudioContext().createGain()
-    @gain.gain.value = options.gain
-    @gain.connect getAudioContext().destination
+    @_gain = getAudioContext().createGain()
+    @_gain.gain.value = options.gain
+    @_gain.connect getAudioContext().destination
 
     request = new XMLHttpRequest
     request.open 'GET', uri, true
@@ -27,55 +28,43 @@ class AudioSample
   _setBuffer: (buffer) ->
     @_buffer = buffer
     @_ready = true
-    @start() if @_autostart
+    @start() if @_autoStart
 
   start: (start=0) ->
-    if @_ready
-      if @autoStop
-        @_source.stop() if @_source?
-      @_source = getAudioContext().createBufferSource()
-      @_source.buffer = @_buffer
-      @_source.connect @gain
-      @_source.loop = @_loop
-      @_source.start start
-      @_autoStart = false
-    else
+    unless @_ready
       @_autoStart = true
+      return
+
+    @_source.stop() if @_autoStop and @_source
+    @_source = getAudioContext().createBufferSource()
+    @_source.buffer = @_buffer
+    @_source.connect @_gain
+    @_source.loop = @_loop
+    @_source.start start
+    @_autoStart = false
 
   stop: ->
-    return unless @_source?
+    return unless @_source
     @_source.stop()
     @_autoStart = false
     delete @_source
 
 class Sfx
   constructor: ->
-    create = (name, options) ->
-      new AudioSample "/#{ name }.ogg", options
-    dinoVolume = Meteor.settings.public.dinoVolume
-    @baby     = create 'baby',
-      gain: dinoVolume
-    @fat      = create 'teenager',
-      gain: dinoVolume
-    @melting  = create 'fat',
-      gain: dinoVolume
-      loop: true
-    @teenager = create 'kid',
-      gain: dinoVolume
-    @final    = create 'final_form',
-      gain: dinoVolume
-    @bongo    = create 'bongo',
-      autoStop: false
-      gain: Meteor.settings.public.track.drumKickVolume
-    @bongoMid = create 'bongo-mid',
-      autoStop: false
-      gain: Meteor.settings.public.track.drumSnareVolume
+    load = (name) =>
+      this[name] = new AudioSample "/#{ name }.ogg",
+        autoStop: true
+        gain: Meteor.settings?.public?.dinoVolume or 1
+
+    load 'baby'
+    load 'kid'
+    load 'fat'
+    load 'final'
 
   play: (name) ->
-    if @currentSound?
-      @currentSound.stop()
-    @currentSound = @[name]
-    @currentSound.start()
+    @_playing.stop() if @_playing
+    @_playing = this[name]
+    @_playing.start()
 
 sfx = null
 

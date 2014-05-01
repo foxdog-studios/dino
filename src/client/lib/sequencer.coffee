@@ -48,8 +48,7 @@ class ImplSequencer
     throw 'Sequencer is disabled' unless @_enabled
 
     @stop()
-    nextBeat = Metronome.getNextBeat().getNextBeatAt(
-      Meteor.settings.public.track.startingBeat)
+    nextBeat = Metronome.getNextBeat()
 
     Utterances.find().forEach (utterance) =>
       start = nextBeat.time + utterance.offset
