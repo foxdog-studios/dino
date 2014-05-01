@@ -5,9 +5,9 @@ Template.utterance.helpers
     cursor = Utterances.find
       _id: @_id
       playbackStart:
-        $lte: nextBeat.now
+        $lte: nextBeat
       playbackEnd:
-        $gt: nextBeat.now
+        $gt: nextBeat
     ,
       sort:
         playbackStart: 1

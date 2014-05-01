@@ -80,9 +80,9 @@ getNextUtterance = ->
   nextBeat = Metronome.getNextBeat()
   Utterances.findOne
     playbackStart:
-      $lte: nextBeat.now
+      $lte: nextBeat
     playbackEnd:
-      $gt: nextBeat.now
+      $gt: nextBeat
   ,
     sort:
       playbackStart: 1
