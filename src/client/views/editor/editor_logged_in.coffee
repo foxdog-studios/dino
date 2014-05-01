@@ -1,6 +1,3 @@
-class KeyCodes
-  @Return = 13
-
 Template.editorLoggedIn.rendered = ->
   if (lyrics = getUserLyrics())
     Session.set 'characterCount', lyrics.length

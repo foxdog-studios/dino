@@ -5,7 +5,8 @@
     "lyrics": {
       "alpha": true,
       "dictionary": false,
-      "lower": true
+      "lower": true,
+      "nonEmpty": true
     },
     "dinoVolume": 0.3,
     "track": {

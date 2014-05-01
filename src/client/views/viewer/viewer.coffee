@@ -20,22 +20,22 @@ Template.viewer.rendered = ->
 
   Session.set 'playing', false
   @_keyupHandler = (event) ->
-    switch event.keyCode
-      when KeyCode.SPACE
+    switch event.which
+      when KeyCodes.SPACE
         event.preventDefault()
         if (isPlaying = Session.get 'playing')
           Sequencer.stop()
         else
           Sequencer.play()
         Session.set 'playing', not isPlaying
-      when KeyCode.D
+      when KeyCodes.D
         event.preventDefault()
         if (isDrumming = Session.get 'drumming')
           drumMachine.stop()
         else
           drumMachine.start()
         Session.set 'drumming', not isDrumming
-      when KeyCode.R
+      when KeyCodes.R
         event.preventDefault()
         Methods.reset()
   window.addEventListener 'keydown', @_keyupHandler, false

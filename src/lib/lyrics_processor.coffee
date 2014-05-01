@@ -13,6 +13,7 @@ class ImplLyricsProcessor
     push @_lower, settings.lower
     push @_split
     push @_alpha, settings.alpha
+    push @_nonEmpty, settings.nonEmpty
     push @_dictionary, settings.dictionary
 
   _alpha: (words) ->
@@ -26,6 +27,10 @@ class ImplLyricsProcessor
 
   _lower: (lyrics) ->
     lyrics.toLowerCase()
+
+  _nonEmpty: (words) ->
+    _.filter words, (word) ->
+      word.length > 0
 
   _split: (lyrics) ->
     lyrics.split /\s+/

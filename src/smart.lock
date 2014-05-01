@@ -3,7 +3,8 @@
   "dependencies": {
     "basePackages": {
       "iron-router": {},
-      "spin": {}
+      "spin": {},
+      "keycodes": {}
     },
     "packages": {
       "iron-router": {
@@ -15,6 +16,11 @@
         "git": "https://github.com/SachaG/meteor-spin.git",
         "tag": "v0.2.2",
         "commit": "3f655f0016228e4195acc784c45d3e3a247dc39f"
+      },
+      "keycodes": {
+        "git": "https://github.com/foxdog-studios/meteor-keycodes.git",
+        "tag": "v0.1.1",
+        "commit": "b3b415f21e08a46630fbc8dd0de00fed97fb382a"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
