@@ -13,7 +13,6 @@ DINO_SCHEMA =
     image: '/final.gif'
 
 Template.viewer.rendered = ->
-  Metronome.enable()
   Sequencer.enable()
 
   Session.set 'playing', false
@@ -74,15 +73,14 @@ Template.viewer.destroyed = ->
   delete @_keyupHandler
   Session.set 'playing'
   Sequencer.disable()
-  Metronome.disable()
 
 getNextUtterance = ->
-  nextBeat = Metronome.getNextBeat()
+  tick = Metronome.getTimeAtNextHalfBeat()
   Utterances.findOne
     playbackStart:
-      $lte: nextBeat
+      $lte: tick
     playbackEnd:
-      $gt: nextBeat
+      $gt: tick
   ,
     sort:
       playbackStart: 1

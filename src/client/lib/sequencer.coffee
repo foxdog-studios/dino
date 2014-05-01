@@ -48,7 +48,7 @@ class ImplSequencer
     throw 'Sequencer is disabled' unless @_enabled
 
     @stop()
-    nextBeat = Metronome.getNextBeat()
+    nextBeat = Metronome.getTimeAtNextBeat()
 
     Utterances.find().forEach (utterance) =>
       start = nextBeat + utterance.offset

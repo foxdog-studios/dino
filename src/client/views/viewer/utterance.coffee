@@ -1,13 +1,13 @@
 Template.utterance.helpers
   class: ->
-    nextBeat = Metronome.getNextBeat()
+    tick = Metronome.getTimeAtNextHalfBeat()
 
     cursor = Utterances.find
       _id: @_id
       playbackStart:
-        $lte: nextBeat
+        $lte: tick
       playbackEnd:
-        $gt: nextBeat
+        $gt: tick
     ,
       sort:
         playbackStart: 1
