@@ -22,7 +22,7 @@ Meteor.methods
       [note, word] = note_word
 
       frequency = note.getFrequency()
-      ssml = """<prosody pitch="#{ frequency }Hz">#{ word }</prosody>"""
+      ssml = renderSsml word, frequency
       wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
 
       Utterances.insert
