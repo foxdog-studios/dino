@@ -1,0 +1,15 @@
+{
+  "meteor": {},
+  "dependencies": {
+    "basePackages": {
+      "pronouncing": {}
+    },
+    "packages": {
+      "pronouncing": {
+        "git": "https://github.com/foxdog-studios/meteor-pronouncing.git",
+        "tag": "v0.0.1",
+        "commit": "675d4e47bf957175360ec095830b39e316dec9f8"
+      }
+    }
+  }
+}

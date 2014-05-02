@@ -19,10 +19,8 @@ global_node_packages=(
 )
 
 pacman_packages=(
-    cracklib
     git
     nodejs
-    python
     zsh
 )
 
@@ -76,11 +74,6 @@ function install_meteorite_packages()
     mrt install
 )}
 
-function build_dictionary()
-{
-    $repo/scripts/build_dictionary.py /usr/share/dict/cracklib-small
-}
-
 function init_local()
 {
     local config_dir=$repo/local/config
@@ -111,7 +104,6 @@ tasks=(
     install_meteor
     install_global_node_packages
     install_meteorite_packages
-    build_dictionary
     init_local
 )
 
@@ -131,7 +123,6 @@ function usage()
 		    install_meteor
 		    install_global_node_packages
 		    install_meteorite_packages
-		    build_dictionary
 		    init_local
 	EOF
     exit 1

@@ -14,16 +14,22 @@ class ImplLyricsProcessor
     push @_split
     push @_alpha, settings.alpha
     push @_nonEmpty, settings.nonEmpty
-    push @_dictionary, settings.dictionary
+    push @_pronounceable, settings.pronounceable
 
   _alpha: (words) ->
     _.map words, (word) ->
       (c for c in word when /[a-z]/.test c).join ''
 
-  _dictionary: (words) ->
-    dictionary = getDictionary()
-    _.filter words, (word) ->
-      dictionary.contains word
+  _pronounceable: (words) ->
+    if Meteor.isServer
+      _.filter words, (word) ->
+        cursor = Pronunciations.find
+          name: word.toUpperCase()
+        ,
+          limit: 1
+        cursor.count() != 0
+    else
+      words
 
   _lower: (lyrics) ->
     lyrics.toLowerCase()

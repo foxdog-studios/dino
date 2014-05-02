@@ -7,10 +7,9 @@ Meteor.methods
     unless (userId = Meteor.userId())
       throw new Meteor.Error 403, 'You must be logged in'
 
-    # Validate the lyrics.
+    # If we lryics contains no valid words, stop now.
     words = LyricsProcessor.makeCleanWords lyrics
-    if _.isEmpty words
-      throw new Meteor.Error 422, 'No valid lyrics supplied', lyrics
+    return if _.isEmpty words
 
     # Identifies the lyrics this utterance comes from.
     messageId = Random.hexString 20

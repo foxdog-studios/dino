@@ -4,7 +4,8 @@
     "basePackages": {
       "iron-router": {},
       "spin": {},
-      "keycodes": {}
+      "keycodes": {},
+      "pronouncing": {}
     },
     "packages": {
       "iron-router": {
@@ -21,6 +22,11 @@
         "git": "https://github.com/foxdog-studios/meteor-keycodes.git",
         "tag": "v0.1.1",
         "commit": "b3b415f21e08a46630fbc8dd0de00fed97fb382a"
+      },
+      "pronouncing": {
+        "git": "https://github.com/foxdog-studios/meteor-pronouncing.git",
+        "tag": "v0.0.1",
+        "commit": "675d4e47bf957175360ec095830b39e316dec9f8"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

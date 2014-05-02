@@ -3,8 +3,8 @@
     "info": "Go to http://fds",
     "latency": 0.1,
     "lyrics": {
-      "alpha": true,
-      "dictionary": false,
+      "alpha": false,
+      "pronounable": true,
       "lower": true,
       "nonEmpty": true
     },
