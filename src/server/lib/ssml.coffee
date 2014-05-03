@@ -61,8 +61,10 @@ convertPhoneme = (phoneme) ->
   PHONEME_CONVERSIONS[phoneme]
 
 convertStress = (stress) ->
+  # Always return the greatest stress (i.e., 1) becasue it sounds
+  # better.
   switch stress
-    when 0 then 0
+    when 0 then 1
     when 1 then 1
-    when 2 then 0
+    when 2 then 1
 
