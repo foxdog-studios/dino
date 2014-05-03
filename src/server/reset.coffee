@@ -6,7 +6,6 @@ Meteor.methods
     reset()
 
 reset = ->
-  Meteor.users.remove {}
   Utterances.remove {}
   return
 

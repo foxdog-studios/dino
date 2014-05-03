@@ -3,10 +3,6 @@ Meteor.methods
     # Validate arguments.
     check lyrics, String
 
-    # Ensure the user is logged in.
-    unless (userId = Meteor.userId())
-      throw new Meteor.Error 403, 'You must be logged in'
-
     # Pronunciations for each word in the cleaned lyrics.
     prons = Lyrics.clean lyrics
     return if _.isEmpty prons
