@@ -39,26 +39,22 @@ PHONEME_CONVERSIONS =
   Z:  'z'
   ZH: 'zh'
 
-@renderSsml = (word, frequency) ->
-  check word, String
-  check frequency, Number
-  renderProsody renderPhoneme(word), frequency
+@renderSsml = (syllable, frequency) ->
+  word = 'word'
+  ssml: renderProsody word, frequency
+  lexicon: renderLexicon word, syllable
 
 renderProsody = (text, frequency) ->
   """<prosody pitch="#{ frequency }Hz">#{ text }</prosody>"""
 
-renderPhoneme = (word) ->
-  pronunciation = Pronunciations.findOne
-    appearance: word.toUpperCase()
-  ,
-    fields:
-      pronunciation: 1
-  pronunciation = renderPronunciation pronunciation.pronunciation
-  """<phoneme ph="#{ pronunciation }">#{ word }</phoneme>"""
+renderLexicon = (word, syllable) ->
+    "#{ word } 0 #{ renderPhonmes syllable }"
 
-renderPronunciation = (pronunciation) ->
-  phonemes = for {phoneme: phoneme, stress: stress} in pronunciation
-    "#{ convertPhoneme phoneme }#{ convertStress stress}"
+renderPhonmes = (syllable) ->
+  phonemes = for {phoneme: phoneme, stress: stress} in syllable
+    phoneme = convertPhoneme phoneme
+    phoneme += convertStress stress if stress?
+    phoneme
   phonemes.join ' '
 
 convertPhoneme = (phoneme) ->

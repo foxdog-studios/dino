@@ -1,9 +1,18 @@
 TTS = (function () {
-  _tts = new Npm.require('tts').Tts();
+  var fs = Npm.require('fs');
 
-  tts = {}
+  var _tts = new Npm.require('tts').Tts();
 
-  tts.makeWaveform = function (ssml) {
+  var tts = {}
+
+  tts.makeWaveform = function (ssml, lexicon) {
+    if (lexicon) {
+      // TODO: Use secure temporary file with clean up.
+      var lexiconPath = '/tmp/lexicon.txt';
+      fs.writeFileSync(lexiconPath, lexicon);
+      _tts.tryLoadLexicon(lexiconPath);
+      fs.unlinkSync(lexiconPath);
+    }
     return _tts.createWaveform(ssml);
   };
 

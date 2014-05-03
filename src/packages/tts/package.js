@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Npm.depends({
-  tts: 'https://github.com/foxdog-studios/node-tts/tarball/6629c23836f4827b537cb0386134cd3b08b65216'
+  tts: 'https://github.com/foxdog-studios/node-tts/tarball/2ffa08fd3f36df54e6a05ab417a2c5a510db5fb4'
 });
 
 Package.on_use(function (api) {

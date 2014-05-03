@@ -8,9 +8,6 @@ Template.editorLoggedIn.helpers
   characterCount: ->
     Session.get 'characterCount'
 
-  preview: ->
-    makePreviewWords()?.join ' '
-
   initialLyrics: ->
     Deps.nonreactive getUserLyrics
 
@@ -21,11 +18,7 @@ Template.editorLoggedIn.helpers
     Session.equals 'submitting', true
 
   sumbitDisabled: ->
-    if Session.equals('submitting', true)
-      true
-    else
-      words = makePreviewWords()
-      not words or words.length == 0
+    Session.equals 'submitting', true
 
   overCount: ->
     'error' if Session.get('characterCount') > 140
@@ -63,10 +56,6 @@ getInputLyrics = (template) ->
 
 getUserLyrics = ->
   Meteor.user()?.profile?.lyrics
-
-makePreviewWords = ->
-  if (lyrics = getUserLyrics())
-    LyricsProcessor.makeCleanWords lyrics
 
 setSelectionRange = (input, selectionStart, selectionEnd) ->
   if input.setSelectionRange

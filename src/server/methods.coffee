@@ -7,37 +7,37 @@ Meteor.methods
     unless (userId = Meteor.userId())
       throw new Meteor.Error 403, 'You must be logged in'
 
-    # If we lryics contains no valid words, stop now.
-    words = LyricsProcessor.makeCleanWords lyrics
-    return if _.isEmpty words
+    # Pronunciations for each word in the cleaned lyrics.
+    prons = Lyrics.clean lyrics
+    return if _.isEmpty prons
 
     # Identifies the lyrics this utterance comes from.
     messageId = Random.hexString 20
 
-    # Assign a note to each word
-    notes = Melody.assign words.length
-    note_words = _.zip notes, words[...notes.length]
+    # The number of syllables in the message, which is also the number
+    # of notes we need.
+    iterator = (sum, pron) -> sum + pron.syllables.length
+    numSyllables = _.reduce prons, iterator, 0
 
-    utteranceIds = note_words.map (note_word) ->
-      [note, word] = note_word
+    # Assign a note to each syllable
+    notes = Melody.assign numSyllables
 
-      frequency = note.getFrequency()
-      ssml = renderSsml word, frequency
-      wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml
+    for pron in prons
+      for syllable in pron.syllables
+        note = notes.shift()
+        break unless note?
+        ssml = renderSsml syllable, note.getFrequency()
+        console.log ssml
+        pcm = TTS.makeWaveform ssml.ssml, ssml.lexicon
+        wav = TTS.makeWav TTS.trimSilence pcm
+        Utterances.insert
+          word: pron.word
+          pitch: note.getFrequency()
+          offset: note.getStart()
+          duration: note.getDuration()
+          wav: wav
+          messageId: messageId
+      break if _.isEmpty notes
 
-      Utterances.insert
-        word: word
-        pitch: frequency
-        offset: note.getStart()
-        duration: note.getDuration()
-        wav: wav
-        userId: userId
-        createAt: Date.now()
-        messageId: messageId
-
-    Meteor.users.update userId,
-      $set:
-        'profile.utteranceIds': utteranceIds
-
-    return
+    return # nothing
 

@@ -25,8 +25,8 @@
       },
       "pronouncing": {
         "git": "https://github.com/foxdog-studios/meteor-pronouncing.git",
-        "tag": "v0.2.0",
-        "commit": "9896856eb97dfaf8da3ca74bc85b97c3dd6ea945"
+        "tag": "v0.3.0",
+        "commit": "4360b168a2bf8e67b982b96eac23fc68e51e49a9"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

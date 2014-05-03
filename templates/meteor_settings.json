@@ -2,12 +2,6 @@
   "public": {
     "info": "Go to http://fds",
     "latency": 0.1,
-    "lyrics": {
-      "alpha": false,
-      "pronounable": true,
-      "lower": true,
-      "nonEmpty": true
-    },
     "dinoVolume": 0.3,
     "track": {
       "bpm": 150,
