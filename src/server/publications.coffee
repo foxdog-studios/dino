@@ -9,7 +9,7 @@ Meteor.publish 'progress', ->
 
   count = 0
   getProgress = ->
-    count / Melody.numNotes() * 100
+    count / getMelody().getNumUnassignedNotes() * 100
 
   handle = Utterances.find().observeChanges
     added: (id, fields) =>

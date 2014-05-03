@@ -1,87 +1,38 @@
-class ImplMelody
-  constructor: ->
-    @_isLocked = false
-    @_numNotes = 0
-    @_remaining = []
-
-  _aquire: ->
-    if @_isLocked
-      throw 'Cannot aquire lock, it is already aquired.'
-    @_isLocked = true
-
-  _release: ->
-    unless @_isLocked
-      throw 'Cannot release lock, it has already been released.'
-    @_isLocked = false
-
-  _withLock: (func) ->
-    @_aquire()
-    result = func()
-    @_release()
-    result
-
-  _checkMaxNotes: (maxNotes) ->
-    check maxNotes, Number
-
-  _cloneNotes: (notes) ->
-    _.clone notes
-
-  reset: (notes) ->
-    @_withLock =>
+class Melody
+  class ImplMelody
+    constructor: (notes) ->
       @_numNotes = notes.length
-      @_remaining = @_cloneNotes notes
+      @_unassigned = notes
 
-  assign: (maxNotes) ->
-    @_checkMaxNotes maxNotes
-    @_withLock =>
-      @_remaining.splice 0, maxNotes
+    assignAtMost: (numNotes) ->
+      @_unassigned.splice 0, numNotes
 
-  numNotes: ->
-    @_withLock =>
+    getNumNotes: ->
       @_numNotes
 
-  numRemaining: ->
-    @_withLock =>
-      @_remaining.length
+    getNumUnassignedNotes: ->
+      @_unassigned.length
 
-  transpose: (semitones) ->
-    check semitones, Number
-    @_withLock =>
-      @_remaining = for note in @_remaining
+    transpose: (semitones) ->
+      @_unassigned = _.map @_unassigned, (note) ->
         note.transpose semitones
 
-melody = null
+  @parse = (bpm, rawMelody) ->
+    nextStart = 0
+    rawNotes = rawMelody.trim().split /\s+/
 
-getMelody = ->
-  melody ||= new ImplMelody
+    notes =
+      for rawNote in rawNotes
+        note = NoteParser.parse(rawNote).schedule bpm, nextStart
+        nextStart += note.getDuration()
+        continue if note.isRest()
+        note
 
-class @Melody
-  @reset: (notes) ->
-    getMelody().reset notes
+    new ImplMelody notes
 
-  @assign: (maxNotes) ->
-    getMelody().assign maxNotes
-
-  @numNotes: ->
-    getMelody().numNotes()
-
-  @numRemaining: ->
-    getMelody().numRemaining()
-
-  @transpose: (semitones) ->
-    getMelody().transpose semitones
-
-@parseMelody = (bpm, rawMelody) ->
-  # Seconds per beat
-  nextStart = 0
-
-  # Leading or trailing whitespace creates an empty raw notes when
-  # split.
-  rawMelody = rawMelody.trim()
-
-  for rawNote in rawMelody.split /\s+/
-    note = NoteParser.parse(rawNote).schedule bpm, nextStart
-    nextStart += note.getDuration()
-    continue if note.isRest()
-    note
-
+@getMelody = _.once ->
+  track = Meteor.settings.public.track
+  melody = Melody.parse track.bpm, track.melody.join ' '
+  if (semitones = track.transpose)?
+    melody.transpose semitones
+  melody

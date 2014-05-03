@@ -20,14 +20,13 @@ Meteor.methods
     numSyllables = _.reduce prons, iterator, 0
 
     # Assign a note to each syllable
-    notes = Melody.assign numSyllables
+    notes = getMelody().assignAtMost numSyllables
 
     for pron in prons
       for syllable in pron.syllables
         note = notes.shift()
         break unless note?
         ssml = renderSsml syllable, note.getFrequency()
-        console.log ssml
         pcm = TTS.makeWaveform ssml.ssml, ssml.lexicon
         wav = TTS.makeWav TTS.trimSilence pcm
         Utterances.insert
