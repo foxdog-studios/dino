@@ -59,13 +59,13 @@ Template.editor.helpers
       'error'
 
 Template.editor.events
-  'keydown .lyrics': (event, template) ->
-    if event.which == KeyCodes.Return
-      event.preventDefault()
-      submitLyrics template
-
   'input .lyrics': (event, template) ->
     updateNumCharacters template
+
+  'keydown .lyrics': (event, template) ->
+    if event.which == KeyCodes.ENTER
+      event.preventDefault()
+      submitLyrics template
 
   'submit': (event, template) ->
     event.preventDefault()
