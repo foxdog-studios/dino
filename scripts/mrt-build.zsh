@@ -52,10 +52,3 @@ $repo/scripts/mrt.zsh bundle $bundle_archive
 # Unbundle
 tar --extract --file $bundle_archive
 
-# Reinstall fibers
-(
-    cd $bundle_dir/programs/server/node_modules
-    rm --force --recursive fibers
-    npm install fibers
-)
-
