@@ -9,15 +9,25 @@ getNumCharacters = ->
   Session.get 'numCharacters'
 
 updateNumCharacters = (template) ->
-  numCharacters = template.find('.lyrics').value.length
-  Session.set 'numCharacters', numCharacters
+  Session.set 'numCharacters', getLyrics(template).length
 
 zeroNumCharacters = ->
   Session.set 'numCharacters', 0
 
 
 # ==============================================================================
-# = Submitting lyrics                                                          =
+# = Lyrics                                                                     =
+# ==============================================================================
+
+getLyrics = (template) ->
+  getLyricsElement(template).value
+
+getLyricsElement = (template) ->
+  template.find '[name=lyrics]'
+
+
+# ==============================================================================
+# = Submitting                                                                 =
 # ==============================================================================
 
 clearSubmitting = ->
@@ -30,20 +40,20 @@ setSubmitting = ->
   Session.set 'submitting', true
 
 submitLyrics = (template) ->
-  input = template.find '.lyrics'
   setSubmitting()
-  Meteor.call 'submitLyrics', input.value, (error) ->
+  Meteor.call 'submitLyrics', getLyrics(template), (error) ->
     clearSubmitting()
     if error?
       console.warn error
     else
-      input.value = ''
-      Session.set 'numCharacters', 0
+      zeroNumCharacters()
 
 
 # ==============================================================================
 # = Template                                                                   =
 # ==============================================================================
+
+MAX_CHARACTERS = 60
 
 Template.editor.created = ->
   clearSubmitting()
@@ -52,11 +62,12 @@ Template.editor.created = ->
 Template.editor.helpers
   isSubmitting: isSubmitting
 
+  maxCharacters: MAX_CHARACTERS
+
   numCharacters: getNumCharacters
 
-  overCount: ->
-    if getNumCharacters() > 140
-      'error'
+  placeholder: "Type your lyrics here. I only sing real words and I ignore
+                punctuation."
 
 Template.editor.events
   'input .lyrics': (event, template) ->

@@ -2,19 +2,21 @@
   <div class="editor">
     {{#if isSubmitting}}
       {{> spinner}}
+      <p class="submitting">Submitting your lyrics&hellip;</p>
     {{else}}
       <form>
         <textarea
             class="lyrics"
-            maxlength="140"
+            maxlength="{{maxCharacters}}"
+            name="lyrics"
             rows="3"
-            placeholder="Type your lyrics here"
+            placeholder="{{placeholder}}"
             autofocus></textarea>
-        <button class="submit">Send lyrics</button>
-        <p class="character-count">
-          <span class="{{overCount}}">{{numCharacters}}</span>/140
-        </p>
+        <button class="submit">Submit lyrics</button>
       </form>
+      <p class="character-count">
+        {{numCharacters}}/{{maxCharacters}}
+      </p>
     {{/if}}
   </div>
 </template>

@@ -1,50 +1,72 @@
-@padding: 1.5%;
+.editor {
 
-body {
-  margin: 0px;
-  padding: 0px;
-}
+  // = Variables =============================================================
 
-.character-count {
-  font-family: Sans-Serif;
-  text-align: right;
-  padding: @padding;
-  margin: 0px;
-  color: #666;
-}
+  @padding: 1.5%;
 
-.error {
-  color: #f31;
-}
 
-.editor .lyrics {
-  background-color: #eeeeee;
-  border: none;
-  font-size: 5vw;
-  margin-left: @padding;
-  margin-top: @padding;
-  margin-bottom: 0%;
-  margin-right: 0%;
-  padding: @padding;
-  resize: none;
-  width: 100% - 4 * @padding;
-  font-family: Sans-Serif;
-}
+  // = Variables =============================================================
 
-.spinner {
-  color: black;
-  display: inline-block;
-  height: 44px;
-  width: 44px;
-}
+  .font() {
+    font-family: Sans-Serif;
+  }
 
-.submit {
-  font-size: 5vw;
-  margin-top: 0%;
-  margin-left: @padding;
-  margin-bottom: 0%;
-  margin-right: 0%;
-  padding: @padding;
-  width: 100% - 2 * @padding;
+  .font-large() {
+    .font();
+    font-size: 5vw;
+  }
+
+  .width(@numPads) {
+    width: 100% - @numPads * @padding;
+  }
+
+  .whitespace() {
+    margin-bottom: 0;
+    margin-left: @padding;
+    margin-right: 0;
+    margin-top: @padding;
+    padding: @padding;
+  }
+
+
+  // = IDs ===================================================================
+
+  #spinner {
+    padding-top: 20%;
+  }
+
+
+  // = Classess ==============================================================
+
+  .character-count {
+    .font();
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: @padding;
+    margin-top: @padding;
+    text-align: right;
+  }
+
+  .lyrics {
+    .font-large();
+    .width(4);
+    .whitespace();
+
+    background-color: #eeeeee;
+    border: none;
+    resize: none;
+  }
+
+  .submit {
+    .font-large();
+    .width(2);
+    .whitespace();
+  }
+
+  .submitting {
+    .font-large();
+    margin: 0;
+    text-align: center;
+  }
 }
 
