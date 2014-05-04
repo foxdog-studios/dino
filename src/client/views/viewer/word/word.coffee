@@ -7,7 +7,7 @@ Template.word.helpers
       playbackStart:
         $lte: tick
       playbackEnd:
-        $gt: tick
+        $gte: tick
 
     if cursor.count() > 0
       'current-utterance'

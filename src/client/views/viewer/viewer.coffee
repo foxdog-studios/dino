@@ -47,7 +47,7 @@ getNextUtterance = ->
     playbackStart:
       $lte: tick
     playbackEnd:
-      $gt: tick
+      $gte: tick
   ,
     sort:
       playbackStart: 1
