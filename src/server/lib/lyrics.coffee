@@ -3,6 +3,18 @@
 # ==============================================================================
 
 queue = new PowerQueue
+  isPaused: true
+
+# If this the first time dino has been run or the database has been
+# reset initialize the notee collection. If it's left empty, the
+# application doesn't, it just does nothing and it's very confusing.
+queue.add (done) ->
+  if Notes.find().count() == 0
+    initializeNotes()
+  done()
+
+Meteor.startup ->
+  queue.run()
 
 
 # ==============================================================================
@@ -162,9 +174,9 @@ assignNotesToLyrics = (lyrics) ->
       wav = TTS.makeWav TTS.trimSilence pcm
 
       Utterances.insert
-        lyricsId: lyricsId
-        wordId: wordId
-        start: note.start
         duration: note.duration
+        lyricsId: lyricsId
+        start: note.start
         wav: wav
+        wordId: wordId
 

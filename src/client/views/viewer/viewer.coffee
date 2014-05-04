@@ -33,6 +33,8 @@ Template.viewer.helpers
     if (utterance = getNextUtterance())?
       Words.find
         lyricsId: utterance.lyricsId
+      ,
+        sort: [['index', 'asc']]
 
 Template.viewer.destroyed = ->
   window.removeEventListener 'keydown', @_keyupHandler, false
