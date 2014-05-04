@@ -1,15 +1,21 @@
 <template name="editor">
-  {{#if isSubmitting}}
-    {{> spinner}}
-  {{else}}
-    <form>
-      <textarea class="lyrics" maxlength="140" rows="3" placeholder="Type your lyrics here" autofocus></textarea>
-      <button class="submit">Send lyrics</button>
-      <p class="character-count">
-        <span class="{{overCount}}">{{numCharacters}}</span>/140
-      </p>
-    </form>
-  {{/if}}
+  <div class="editor">
+    {{#if isSubmitting}}
+      {{> spinner}}
+    {{else}}
+      <form>
+        <textarea
+            class="lyrics"
+            maxlength="140"
+            rows="3"
+            placeholder="Type your lyrics here"
+            autofocus></textarea>
+        <button class="submit">Send lyrics</button>
+        <p class="character-count">
+          <span class="{{overCount}}">{{numCharacters}}</span>/140
+        </p>
+      </form>
+    {{/if}}
+  </div>
 </template>
-
 

@@ -4,23 +4,16 @@
   {{/if}}
   <div id="viewer">
     {{#unless playing}}
-      <p class="info">
-        {{info}}
-      </p>
+      <p class="info">{{info}}</p>
     {{/unless}}
-
     {{#if playing}}
-      <p class="message">
-        {{#each utterances}}
-          {{> utterance}}
-        {{/each}}
+      <p class="lyrics">
+        {{#each words}}{{> word}}{{/each}}
       </p>
     {{else}}
-      <p class="progress">
-        {{progress}} %
-      </p>
+      <p class="progress">{{progress}} %</p>
     {{/if}}
-    {{> dinoGrowing dino}}
+    {{> dino}}
   </div>
 </template>
 

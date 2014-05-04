@@ -51,7 +51,7 @@ class ImplSequencer
     nextBeat = Metronome.getTimeAtNextBeat()
 
     Utterances.find().forEach (utterance) =>
-      start = nextBeat + utterance.offset
+      start = nextBeat + utterance.start
       if (buffer = @_buffers[utterance._id])
         source = @_ctx.createBufferSource()
         source.buffer = buffer

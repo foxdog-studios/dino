@@ -1,17 +1,3 @@
-DINO_SCHEMA =
-  baby:
-    sound: 'baby'
-    image: '/baby.gif'
-  kid:
-    sound: 'kid'
-    image: '/kid.gif'
-  fat:
-    sound: 'fat'
-    image: '/fat.gif'
-  final:
-    sound: 'final'
-    image: '/final.gif'
-
 Template.viewer.rendered = ->
   Sequencer.enable()
 
@@ -27,50 +13,29 @@ Template.viewer.rendered = ->
         Session.set 'playing', not isPlaying
       when KeyCodes.R
         event.preventDefault()
-        Methods.reset()
+        Meteor.call 'resetLyrics'
   window.addEventListener 'keydown', @_keyupHandler, false
 
 Template.viewer.helpers
-  utterances: ->
-    return unless (nextUtterance = getNextUtterance())
-    Utterances.find
-      messageId: nextUtterance.messageId
-    ,
-      sort:
-        playbackStart: 1
+  hasEnoughWords: ->
+    Progress.get() >= 100
 
   info: ->
-    Meteor.settings.public.info
-
-  numberOfUtterances: ->
-    Utterances.find().count()
-
-  progress: ->
-    getProgress().toFixed(1)
+    Meteor.settings?.public?.info
 
   playing: ->
     Session.get 'playing'
 
-  hasEnoughWords: ->
-    getProgress() >= 100
+  progress: ->
+    Progress.get().toFixed 1
 
-  dino: ->
-    progress = getProgress()
-    name = switch
-      when progress <  33 then 'baby'
-      when progress <  66 then 'kid'
-      when progress < 100 then 'fat'
-      else 'final'
-    dino = DINO_SCHEMA[name]
-    dino.progress = progress
-    # Don't play at beginning
-    if progress > 0
-      getSfx().play(dino.sound)
-    dino
+  words: ->
+    if (utterance = getNextUtterance())?
+      Words.find
+        lyricsId: utterance.lyricsId
 
 Template.viewer.destroyed = ->
   window.removeEventListener 'keydown', @_keyupHandler, false
-  delete @_keyupHandler
   Session.set 'playing'
   Sequencer.disable()
 
@@ -84,10 +49,4 @@ getNextUtterance = ->
   ,
     sort:
       playbackStart: 1
-
-@getProgress = ->
-  progress = Progress.findOne()
-  return 0 unless progress
-  progress.progress
-
 

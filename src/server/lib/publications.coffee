@@ -2,29 +2,17 @@
 # = Progress                                                                   =
 # ==============================================================================
 
-PROGRESS_ID = 'progress'
+ID = 'progress'
 
-Meteor.publish 'progress', ->
-  initializing = true
-
-  count = 0
-  getProgress = ->
-    count / getMelody().getNumUnassignedNotes() * 100
-
+Meteor.publish ID, ->
+  @added ID, ID, progress: 0
+  update = =>
+    @changed ID, ID,
+      progress: 100 * (Utterances.find().count() / Notes.find().count())
   handle = Utterances.find().observeChanges
-    added: (id, fields) =>
-      count++
-      return if initializing
-      @changed 'progress', PROGRESS_ID, progress: getProgress()
-
-    removed: (id) =>
-      count--
-      @changed 'progress', PROGRESS_ID, progress: getProgress()
-  @onStop ->
-    handle.stop()
-
-  initializing = false
-  @added 'progress', PROGRESS_ID, progress: getProgress()
+    added: update
+    removed: update
+  @onStop -> handle.stop()
   @ready()
 
 
@@ -36,4 +24,14 @@ Meteor.publish 'utterances', ->
   Utterances.find {},
     order: [['createdAt', 'asc']]
 
+
+# ==============================================================================
+# = Words                                                                      =
+# ==============================================================================
+
+Meteor.publish 'words', ->
+  Words.find {},
+    order: [['createdAt', 'asc']]
+    fields:
+      createdAt: 0
 

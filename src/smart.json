@@ -3,6 +3,7 @@
     "iron-router": {},
     "spin": {},
     "keycodes": {},
-    "pronouncing": {}
+    "pronouncing": {},
+    "power-queue": {}
   }
 }

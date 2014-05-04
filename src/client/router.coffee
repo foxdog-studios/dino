@@ -9,6 +9,7 @@ Router.map ->
     path: '/viewer'
 
     waitOn: ->
-      Meteor.subscribe 'utterances'
       Meteor.subscribe 'progress'
+      Meteor.subscribe 'utterances'
+      Meteor.subscribe 'words'
 

@@ -1,16 +1,13 @@
-Template.utterance.helpers
+Template.word.helpers
   class: ->
     tick = Metronome.getTimeAtNextHalfBeat()
 
     cursor = Utterances.find
-      _id: @_id
+      wordId: @_id
       playbackStart:
         $lte: tick
       playbackEnd:
         $gt: tick
-    ,
-      sort:
-        playbackStart: 1
 
     if cursor.count() > 0
       'current-utterance'
