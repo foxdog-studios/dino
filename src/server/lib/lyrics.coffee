@@ -92,20 +92,19 @@ assignNotesToLyrics = (lyrics) ->
   # Assume each word is separated by whitespace.
   words = lyrics.split /\s+/
 
-  # From each word:
-  #   * Remove anything that isn't a;
-  #     * Letter
-  #     * Apostrophe
-  #     * Hyphne letter
-  #
-  #   * Convert into an object saving original case and upper case
-  #     versions of the word.
-
+  # From each word, remove anything that isn't an apostrophe, a hyphen,
+  # a period, a number, or a letter.
   words = _.map words, (word) ->
-    word = word.replace /[^a-z'-]/i, ''
+    word.replace /[^'\-.0-9a-z]/gi, ''
+
+  # Remove empty words.
+  words = _.filter words, (word) ->
+    word.length > 0
+
+  #  Saving the original case and an upper case version of the word.
+  words = _.map words, (word) ->
     original: word
     upper: word.toUpperCase()
-
 
   # Try find the pronunciation of each word.
   cursor = Pronunciations.find
@@ -119,14 +118,10 @@ assignNotesToLyrics = (lyrics) ->
   cursor.forEach (pron) ->
     syllables[pron._id] = pron.syllables
 
-  # Remove words that cannot be pronounced.
-  words = _.filter words, (word) ->
-    _.has syllables, word.upper
-
   # Calculate the number of notes required: one for each syllable of
-  # the cleaned lyrics.
+  # pronounceable words, and one for each unpronounceable word.
   iterator = (sum, word) ->
-    sum + syllables[word.upper].length
+    sum + (syllables[word.upper]?.length ? 1)
   numNotes = _.reduce words, iterator, 0
 
   cursor = Notes.find
@@ -162,16 +157,12 @@ assignNotesToLyrics = (lyrics) ->
       lyricsId: lyricsId
       word: word.original
 
-    for syllable in syllables[word.upper]
-
-      # The notes may run out before the syllables do.
-      note = notes.shift()
-      break unless note?
-
-      # Text-to-speech
-      ssml = renderSsml syllable, note.frequency
-      pcm = TTS.makeWaveform ssml.ssml, ssml.lexicon
-      wav = TTS.makeWav TTS.trimSilence pcm
+    tts = (note, syllable) ->
+      # Text to speech
+      text = if syllable? then 'dummy' else word.original
+      ssml = renderProsody text, note.frequency
+      lexicon = renderLexicon text, syllable if syllable?
+      wav = TTS.makeWav TTS.trimSilence TTS.makeWaveform ssml, lexicon
 
       Utterances.insert
         duration: note.duration
@@ -179,4 +170,15 @@ assignNotesToLyrics = (lyrics) ->
         start: note.start
         wav: wav
         wordId: wordId
+
+    if _.has syllables, word.upper
+      for syllable in syllables[word.upper]
+        # The notes may run out before the syllables do.
+        note = notes.shift()
+        break unless note?
+        tts note, syllable
+    else
+      # The break at the start of the loop ensure that there is at
+      # least a one note.
+      tts notes.shift()
 

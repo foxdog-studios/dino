@@ -39,15 +39,10 @@ PHONEME_CONVERSIONS =
   Z:  'z'
   ZH: 'zh'
 
-@renderSsml = (syllable, frequency) ->
-  word = 'word'
-  ssml: renderProsody word, frequency
-  lexicon: renderLexicon word, syllable
-
-renderProsody = (text, frequency) ->
+@renderProsody = (text, frequency) ->
   """<prosody pitch="#{ frequency }Hz">#{ text }</prosody>"""
 
-renderLexicon = (word, syllable) ->
+@renderLexicon = (word, syllable) ->
     "#{ word } 0 #{ renderPhonmes syllable }"
 
 renderPhonmes = (syllable) ->
@@ -61,10 +56,8 @@ convertPhoneme = (phoneme) ->
   PHONEME_CONVERSIONS[phoneme]
 
 convertStress = (stress) ->
-  # Always return the greatest stress (i.e., 1) becasue it sounds
-  # better.
   switch stress
-    when 0 then 1
+    when 0 then 0
     when 1 then 1
     when 2 then 1
 
