@@ -6,7 +6,11 @@
       "spin": {},
       "keycodes": {},
       "pronouncing": {},
-      "power-queue": {}
+      "power-queue": {},
+      "sequencer": {
+        "git": "https://github.com/foxdog-studios/meteor-sequencer.git",
+        "branch": "master"
+      }
     },
     "packages": {
       "iron-router": {
@@ -21,8 +25,8 @@
       },
       "keycodes": {
         "git": "https://github.com/foxdog-studios/meteor-keycodes.git",
-        "tag": "v0.1.1",
-        "commit": "b3b415f21e08a46630fbc8dd0de00fed97fb382a"
+        "tag": "v0.2.0",
+        "commit": "0c155fb447ffdbc5ecf8cc1ad4e3726ebed552e7"
       },
       "pronouncing": {
         "git": "https://github.com/foxdog-studios/meteor-pronouncing.git",
@@ -33,6 +37,11 @@
         "git": "https://github.com/CollectionFS/Meteor-power-queue.git",
         "tag": "v0.9.9",
         "commit": "567d3905784a8be6aacfbb69d477003ba9b5c4b5"
+      },
+      "sequencer": {
+        "git": "https://github.com/foxdog-studios/meteor-sequencer.git",
+        "branch": "master",
+        "commit": "5b7429c4cc492ce35608a68dbc33d9e2ac88bb5b"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

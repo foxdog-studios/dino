@@ -48,7 +48,7 @@ class ImplSequencer
     throw 'Sequencer is disabled' unless @_enabled
 
     @stop()
-    nextBeat = Metronome.getTimeAtNextBeat()
+    nextBeat = DinoMetronome.getTimeAtNextBeat()
 
     Utterances.find().forEach (utterance) =>
       start = nextBeat + utterance.start
@@ -76,7 +76,7 @@ sequencer = null
 getSequencer = ->
   sequencer ||= new ImplSequencer
 
-class @Sequencer
+class @DinoSequencer
   @enable: ->
     getSequencer().enable()
 

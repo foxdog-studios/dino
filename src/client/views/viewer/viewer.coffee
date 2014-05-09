@@ -1,5 +1,5 @@
 Template.viewer.rendered = ->
-  Sequencer.enable()
+  DinoSequencer.enable()
 
   Session.set 'playing', false
   @_keyupHandler = (event) ->
@@ -7,9 +7,9 @@ Template.viewer.rendered = ->
       when KeyCodes.SPACE
         event.preventDefault()
         if (isPlaying = Session.get 'playing')
-          Sequencer.stop()
+          DinoSequencer.stop()
         else
-          Sequencer.play()
+          DinoSequencer.play()
         Session.set 'playing', not isPlaying
       when KeyCodes.R
         event.preventDefault()
@@ -39,10 +39,10 @@ Template.viewer.helpers
 Template.viewer.destroyed = ->
   window.removeEventListener 'keydown', @_keyupHandler, false
   Session.set 'playing'
-  Sequencer.disable()
+  DinoSequencer.disable()
 
 getNextUtterance = ->
-  tick = Metronome.getTimeAtNextHalfBeat()
+  tick = DinoMetronome.getTimeAtNextHalfBeat()
   Utterances.findOne
     playbackStart:
       $lte: tick

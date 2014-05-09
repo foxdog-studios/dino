@@ -1,6 +1,6 @@
 Template.word.helpers
   class: ->
-    tick = Metronome.getTimeAtNextHalfBeat()
+    tick = DinoMetronome.getTimeAtNextHalfBeat()
 
     cursor = Utterances.find
       wordId: @_id
