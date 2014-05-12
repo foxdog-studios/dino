@@ -1,7 +1,5 @@
-createSequencer = ->
+getSequencer = _.once ->
   new Sequencer getAudioContext()
-
-getSequencer = _.once -> createSequencer()
 
 createMetronome = (ticksPerBeat) ->
   beatsPerMinute = Meteor.settings.public.track.bpm

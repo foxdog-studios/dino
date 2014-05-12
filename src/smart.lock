@@ -7,10 +7,7 @@
       "keycodes": {},
       "pronouncing": {},
       "power-queue": {},
-      "sequencer": {
-        "git": "https://github.com/foxdog-studios/meteor-sequencer.git",
-        "branch": "master"
-      }
+      "sequencer": {}
     },
     "packages": {
       "iron-router": {
@@ -40,8 +37,8 @@
       },
       "sequencer": {
         "git": "https://github.com/foxdog-studios/meteor-sequencer.git",
-        "branch": "master",
-        "commit": "5b7429c4cc492ce35608a68dbc33d9e2ac88bb5b"
+        "tag": "v0.0.5",
+        "commit": "d0c9733c7498bb4729f5439e5586795b66cbcbbd"
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",

@@ -5,8 +5,6 @@
     "keycodes": {},
     "pronouncing": {},
     "power-queue": {},
-    "sequencer": {
-      "git": "https://github.com/foxdog-studios/meteor-sequencer.git"
-    }
+    "sequencer": {}
   }
 }
