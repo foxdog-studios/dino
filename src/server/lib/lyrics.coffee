@@ -124,6 +124,10 @@ assignNotesToLyrics = (lyrics) ->
     sum + (syllables[word.upper]?.length ? 1)
   numNotes = _.reduce words, iterator, 0
 
+  # If the number of notes is zero, return because limit: 0, is
+  # actually no limit and it assign every note!
+  return if numNotes == 0
+
   cursor = Notes.find
     assigned:
       $exists: false
