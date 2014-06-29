@@ -33,7 +33,6 @@ repo=$(realpath "$(dirname "$(realpath -- $0)")/..")
 
 bundle_name=bundle
 build_dir=$repo/local/build
-bundle_archive=$build_dir/$bundle_name.tgz
 bundle_dir=$build_dir/$bundle_name
 
 
@@ -47,9 +46,5 @@ mkdir --parents $build_dir
 
 # Create bundle
 cd $repo/src
-mrt bundle $bundle_archive
-
-# Extract
-cd $build_dir
-tar --extract --file $bundle_archive
+mrt bundle --directory $bundle_dir
 
