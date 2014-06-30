@@ -30,10 +30,7 @@ fi
 # ==============================================================================
 
 repo=$(realpath "$(dirname "$(realpath -- $0)")/..")
-
-bundle_name=bundle
-build_dir=$repo/local/build
-bundle_dir=$build_dir/$bundle_name
+bundle_dir=$repo/local/bundle
 
 
 # ==============================================================================
@@ -41,10 +38,10 @@ bundle_dir=$build_dir/$bundle_name
 # ==============================================================================
 
 # Remove old build
-rm --force --recursive $build_dir
-mkdir --parents $build_dir
+rm --force --recursive $bundle_dir
+mkdir --parents $bundle_dir:h
 
 # Create bundle
 cd $repo/src
-mrt bundle --directory $bundle_dir
+meteor bundle --directory $bundle_dir
 
