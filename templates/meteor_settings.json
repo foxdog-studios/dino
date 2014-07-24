@@ -1,4 +1,10 @@
 {
+  "twilio": {
+    "enabled": false,
+    "url": "http://localhost:3000/",
+    "username": "twilio_app_username",
+    "password": "twilio_app_password"
+  },
   "public": {
     "info": "Go to http://fds",
     "latency": 0.1,

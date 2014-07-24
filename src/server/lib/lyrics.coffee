@@ -83,7 +83,7 @@ Meteor.methods
     queueAssignNotesToLyrics lyrics
     return
 
-queueAssignNotesToLyrics = (lyrics) ->
+@queueAssignNotesToLyrics = (lyrics) ->
   queue.add (done) ->
     assignNotesToLyrics lyrics
     done()
