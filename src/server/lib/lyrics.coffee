@@ -31,20 +31,30 @@ queueNoteInitialization = ->
 initializeNotes = ->
   settings = Meteor.settings.public.track
 
-  # Extract raw notes from the settings.
-  rawNotes = settings
-      .melody
-      .join ' '
-      .trim()
-      .split /\s+/
-
-  bpm = settings.bpm
+  if Meteor.settings.public.useTrack
+    # Extract raw notes from the settings.
+    rawNotes = settings
+        .melody
+        .join ' '
+        .trim()
+        .split /\s+/
+    noteParser = NoteParser
+    bpm = settings.bpm
+  else
+    abcJson = parseAbcFile('greensleeves.abc')
+    rawNotes = []
+    for bar in abcJson.song[0][0]
+      for chord in bar.chords
+        for note in chord.notes
+          rawNotes.push note
+    bpm = abcJson.header.tempo[0]
+    noteParser = new AbcNoteParser(abcJson.header.note_length)
 
   nextStart = 0
 
   # Parse the raw notes.
   notes = for rawNote in rawNotes
-    note = NoteParser
+    note = noteParser
         .parse rawNote
         .schedule bpm, nextStart
     nextStart += note.getDuration()

@@ -5,6 +5,9 @@
     "keycodes": {},
     "pronouncing": {},
     "power-queue": {},
-    "sequencer": {}
+    "sequencer": {
+      "git": "https://github.com/foxdog-studios/meteor-sequencer"
+    },
+    "npm": {}
   }
 }
