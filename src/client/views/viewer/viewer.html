@@ -9,7 +9,9 @@
     {{/unless}}
     {{#if playing}}
       <p class="lyrics">
-        {{#each words}}{{> word}}{{/each}}
+        {{#each words}}
+          {{> word}}
+        {{/each}}
       </p>
     {{else}}
       <p class="progress">{{progress}} %</p>
