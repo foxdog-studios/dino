@@ -16,6 +16,7 @@ Template.viewer.rendered = ->
         Meteor.call 'resetLyrics'
   window.addEventListener 'keydown', @_keyupHandler, false
 
+
 Template.viewer.helpers
   hasEnoughWords: ->
     Progress.get() >= 100
@@ -36,10 +37,12 @@ Template.viewer.helpers
       ,
         sort: [['index', 'asc']]
 
+
 Template.viewer.destroyed = ->
   window.removeEventListener 'keydown', @_keyupHandler, false
   Session.set 'playing'
   DinoSequencer.disable()
+
 
 getNextUtterance = ->
   tick = DinoMetronome.getTimeAtNextHalfBeat()

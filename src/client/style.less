@@ -1,0 +1,202 @@
+// =============================================================================
+// = Configuration                                                             =
+// =============================================================================
+
+@gradientStart: #272F27;
+@gradientEnd: #27272F;
+
+
+// =============================================================================
+// = Mixins                                                                    =
+// =============================================================================
+
+.background-gradient-linear(@start; @end) {
+  background-color: @end;
+
+  // Chrome 1-9, Safari 4-5
+  background: -webkit-gradient(linear, 0%, 0%, 0%, 100%, from(@start),
+                               to(@end));
+
+  // Chrome 10+, Safari 5.1
+  background: -webkit-linear-gradient(top, @start, @end);
+
+  // Firefox 3.6+
+  background: -moz-linear-gradient(top, @start, @end);
+
+  // IE 10
+  background: -ms-linear-gradient(top, @start, @end);
+
+  // Opera 11.10+
+  background: -o-linear-gradient(top, @start, @end);
+}
+
+.fullscreen() {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+}
+
+
+// =============================================================================
+// = Generic                                                                   =
+// =============================================================================
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+
+
+// =============================================================================
+// = Editor                                                                    =
+// =============================================================================
+
+#spinner {
+  padding-top: 20%;
+}
+
+.editor {
+
+  // = Variables =============================================================
+
+  @padding: 1.5%;
+
+
+  // = Variables =============================================================
+
+  .font() {
+    font-family: Sans-Serif;
+  }
+
+  .font-large() {
+    .font();
+    font-size: 5vw;
+  }
+
+  .width(@numPads) {
+    width: 100% - @numPads * @padding;
+  }
+
+  .whitespace() {
+    margin-bottom: 0;
+    margin-left: @padding;
+    margin-right: 0;
+    margin-top: @padding;
+    padding: @padding;
+  }
+
+
+  // = Classess ==============================================================
+
+  .character-count {
+    .font();
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: @padding;
+    margin-top: @padding;
+    text-align: right;
+  }
+
+  .lyrics {
+    .font-large();
+    .width(4);
+    .whitespace();
+
+    background-color: #eeeeee;
+    border: none;
+    resize: none;
+  }
+
+  .submit {
+    .font-large();
+    .width(2);
+    .whitespace();
+  }
+
+  .submitting {
+    .font-large();
+    margin: 0;
+    text-align: center;
+  }
+}
+
+
+// =============================================================================
+// = Songs                                                                     =
+// =============================================================================
+
+.songs {
+  position: absolute;
+  bottom: 0px;
+  z-index: 14;
+}
+
+.songs label {
+  display: block;
+}
+
+
+// =============================================================================
+// = Viewer                                                                    =
+// =============================================================================
+
+#viewer {
+  .fullscreen();
+  .background-gradient-linear(@gradientStart, @gradientEnd);
+
+  .lyrics {
+    .fullscreen();
+    z-index: 10;
+    padding: 0px;
+    margin: 0px;
+
+    color: #999;
+    font-size: 50px;
+    font-size: 10vw;
+    font-family: Sans-Serif;
+    font-weight: bold;
+    text-align: center;
+  }
+}
+
+.current-utterance {
+  color: #fff;
+}
+
+.dino {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  text-align: center;
+  z-index: 1;
+}
+
+.mask {
+  .fullscreen();
+  background-color: rgba(0, 0, 0, 1.0);
+  z-index: 2;
+}
+
+.info {
+  color: #FFF;
+  font-size: 50px;
+  font-size: 9vw;
+  font-family: Sans-Serif;
+  text-align: center;
+}
+
+.progress {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 13;
+  font-size: 50px;
+  font-size: 9vw;
+  font-family: Sans-Serif;
+  text-align: right;
+  color: #Fa0;
+}
+
