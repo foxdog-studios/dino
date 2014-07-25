@@ -16,6 +16,7 @@ Meteor.startup ->
       ,
         name: 'default'
         currentSongId: id
+        lastChanged: new Date()
 
 Meteor.methods
   changeSong: (songId) ->
@@ -25,5 +26,6 @@ Meteor.methods
     ,
       name: 'default'
       currentSongId: songId
+      lastChanged: new Date()
     queueNoteInitialization()
 

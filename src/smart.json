@@ -6,7 +6,8 @@
     "pronouncing": {},
     "power-queue": {},
     "sequencer": {
-      "git": "https://github.com/foxdog-studios/meteor-sequencer"
+      "git": "https://github.com/foxdog-studios/meteor-sequencer",
+      "branch": "master"
     },
     "npm": {}
   }

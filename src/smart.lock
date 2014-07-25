@@ -42,7 +42,7 @@
       "sequencer": {
         "git": "https://github.com/foxdog-studios/meteor-sequencer",
         "branch": "master",
-        "commit": "3d31c284355dc98660d5f80d003792ec6c183f43"
+        "commit": "93659b56b594559dfc26399cc27950e7fdd55e89"
       },
       "npm": {
         "git": "https://github.com/arunoda/meteor-npm.git",
