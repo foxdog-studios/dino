@@ -5,6 +5,7 @@
     "username": "twilio_app_username",
     "password": "twilio_app_password"
   },
+  "defaultAbcFile": "greensleeves.abc",
   "public": {
     "info": "Go to http://fds",
     "latency": 0.1,

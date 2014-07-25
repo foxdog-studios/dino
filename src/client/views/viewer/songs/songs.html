@@ -1,0 +1,9 @@
+<template name="songs">
+  {{#if showSongs}}
+    <div class="songs">
+    {{#each songs}}
+      {{> song}}
+    {{/each}}
+    </div>
+  {{/if}}
+</template>

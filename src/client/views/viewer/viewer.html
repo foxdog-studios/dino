@@ -5,6 +5,7 @@
   <div id="viewer">
     {{#unless playing}}
       <p class="info">{{info}}</p>
+      {{> songs}}
     {{/unless}}
     {{#if playing}}
       <p class="lyrics">

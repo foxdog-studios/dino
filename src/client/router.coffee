@@ -10,6 +10,8 @@ Router.map ->
 
     waitOn: ->
       Meteor.subscribe 'progress'
+      Meteor.subscribe 'rooms'
+      Meteor.subscribe 'songs'
       Meteor.subscribe 'utterances'
       Meteor.subscribe 'words'
 

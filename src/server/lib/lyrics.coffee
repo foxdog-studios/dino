@@ -10,12 +10,11 @@ queue = new PowerQueue
 # application doesn't, it just does nothing and it's very confusing.
 queue.add (done) ->
   if Notes.find().count() == 0
-    initializeNotes()
+    initializeNotes(Meteor.settings.defaultAbcFile)
   done()
 
 Meteor.startup ->
   queue.run()
-
 
 # ==============================================================================
 # = Notes                                                                      =
@@ -23,32 +22,26 @@ Meteor.startup ->
 
 @Notes = new Meteor.Collection 'notes'
 
-queueNoteInitialization = ->
+@queueNoteInitialization = () ->
   queue.add (done) ->
-    initializeNotes()
+    room = Rooms.findOne(name: 'default')
+    if room?
+      song = Songs.findOne room.currentSongId
+      if song?
+        initializeNotes(song.fileName)
     done()
 
-initializeNotes = ->
+initializeNotes = (fileName) ->
   settings = Meteor.settings.public.track
 
-  if Meteor.settings.public.useTrack
-    # Extract raw notes from the settings.
-    rawNotes = settings
-        .melody
-        .join ' '
-        .trim()
-        .split /\s+/
-    noteParser = NoteParser
-    bpm = settings.bpm
-  else
-    abcJson = parseAbcFile('greensleeves.abc')
-    rawNotes = []
-    for bar in abcJson.song[0][0]
-      for chord in bar.chords
-        for note in chord.notes
-          rawNotes.push note
-    bpm = abcJson.header.tempo[0]
-    noteParser = new AbcNoteParser(abcJson.header.note_length)
+  abcJson = parseAbcFile(fileName)
+  rawNotes = []
+  for bar in abcJson.song[0][0]
+    for chord in bar.chords
+      for note in chord.notes
+        rawNotes.push note
+  bpm = abcJson.header.tempo[0]
+  noteParser = new AbcNoteParser(abcJson.header.note_length)
 
   nextStart = 0
 
