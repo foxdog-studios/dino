@@ -104,6 +104,9 @@ assignNotesToLyrics = (lyrics) ->
   words = _.filter words, (word) ->
     word.length > 0
 
+  words = for word in words
+    ProfanityFilter.getInstance().clean(word)
+
   #  Saving the original case and an upper case version of the word.
   words = _.map words, (word) ->
     original: word
