@@ -1,0 +1,64 @@
+Template.viewer.rendered = ->
+  DinoSequencer.enable()
+
+  Stream.on SING, onSing
+
+  Session.set 'playing', false
+  @_keyupHandler = (event) ->
+    switch event.which
+      when KeyCodes.SPACE
+        event.preventDefault()
+        onSing()
+      when KeyCodes.R
+        event.preventDefault()
+        Meteor.call 'resetLyrics'
+  window.addEventListener 'keydown', @_keyupHandler, false
+
+
+Template.viewer.helpers
+  hasEnoughWords: ->
+    Progress.get() >= 100
+
+  info: ->
+    Meteor.settings?.public?.info
+
+  playing: ->
+    Session.get 'playing'
+
+  progress: ->
+    Progress.get().toFixed 1
+
+  words: ->
+    if (utterance = getNextUtterance())?
+      Words.find
+        lyricsId: utterance.lyricsId
+      ,
+        sort: [['index', 'asc']]
+
+
+Template.viewer.destroyed = ->
+  window.removeEventListener 'keydown', @_keyupHandler, false
+  Session.set 'playing'
+  DinoSequencer.disable()
+  Stream.removeListener onSing
+
+
+getNextUtterance = ->
+  tick = DinoMetronome.getTimeAtNextHalfBeat()
+  Utterances.findOne
+    playbackStart:
+      $lte: tick
+    playbackEnd:
+      $gte: tick
+  ,
+    sort:
+      playbackStart: 1
+
+
+onSing = ->
+  if (isPlaying = Session.get 'playing')
+    DinoSequencer.stop()
+  else
+    DinoSequencer.play()
+  Session.set 'playing', not isPlaying
+

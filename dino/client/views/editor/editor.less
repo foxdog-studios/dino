@@ -1,0 +1,74 @@
+.editor {
+
+  // = Variables =============================================================
+
+  @padding: 1.5%;
+
+
+  // = Variables =============================================================
+
+  .font() {
+    font-family: Sans-Serif;
+  }
+
+  .font-large() {
+    .font();
+    font-size: 5vw;
+  }
+
+  .width(@numPads) {
+    width: 100% - @numPads * @padding;
+  }
+
+  .whitespace() {
+    margin-bottom: 0;
+    margin-left: @padding;
+    margin-right: 0;
+    margin-top: @padding;
+    padding: @padding;
+  }
+
+
+  // = IDs ===================================================================
+
+  #spinner {
+    padding-top: 20%;
+  }
+
+
+  // = Classess ==============================================================
+
+  .character-count {
+    .font();
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: @padding;
+    margin-top: @padding;
+    text-align: right;
+  }
+
+  .lyrics {
+    .font-large();
+    .width(4);
+    .whitespace();
+
+    background-color: #eeeeee;
+    border: none;
+    resize: none;
+  }
+
+  .reset,
+  .sing,
+  .submit {
+    .font-large();
+    .width(2);
+    .whitespace();
+  }
+
+  .submitting {
+    .font-large();
+    margin: 0;
+    text-align: center;
+  }
+}
+
