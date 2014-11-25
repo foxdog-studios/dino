@@ -10,11 +10,12 @@ queue = new PowerQueue
 # application doesn't, it just does nothing and it's very confusing.
 queue.add (done) ->
   if Notes.find().count() == 0
-    initializeNotes(Meteor.settings.defaultAbcFile)
+    initializeNotes()
   done()
 
 Meteor.startup ->
   queue.run()
+
 
 # ==============================================================================
 # = Notes                                                                      =
@@ -22,32 +23,28 @@ Meteor.startup ->
 
 @Notes = new Meteor.Collection 'notes'
 
-@queueNoteInitialization = () ->
+queueNoteInitialization = ->
   queue.add (done) ->
-    room = Rooms.findOne(name: 'default')
-    if room?
-      song = Songs.findOne room.currentSongId
-      if song?
-        initializeNotes(song.fileName)
+    initializeNotes()
     done()
 
-initializeNotes = (fileName) ->
+initializeNotes = ->
   settings = Meteor.settings.public.track
 
-  abcJson = parseAbcFile(fileName)
-  rawNotes = []
-  for bar in abcJson.song[0][0]
-    for chord in bar.chords
-      for note in chord.notes
-        rawNotes.push note
-  bpm = abcJson.header.tempo[0]
-  noteParser = new AbcNoteParser(abcJson.header.note_length)
+  # Extract raw notes from the settings.
+  rawNotes = settings
+      .melody
+      .join ' '
+      .trim()
+      .split /\s+/
+
+  bpm = settings.bpm
 
   nextStart = 0
 
   # Parse the raw notes.
   notes = for rawNote in rawNotes
-    note = noteParser
+    note = NoteParser
         .parse rawNote
         .schedule bpm, nextStart
     nextStart += note.getDuration()
@@ -86,10 +83,12 @@ Meteor.methods
     queueAssignNotesToLyrics lyrics
     return
 
-@queueAssignNotesToLyrics = (lyrics) ->
+
+queueAssignNotesToLyrics = (lyrics) ->
   queue.add (done) ->
     assignNotesToLyrics lyrics
     done()
+
 
 assignNotesToLyrics = (lyrics) ->
   # Assume each word is separated by whitespace.
@@ -103,9 +102,6 @@ assignNotesToLyrics = (lyrics) ->
   # Remove empty words.
   words = _.filter words, (word) ->
     word.length > 0
-
-  words = for word in words
-    ProfanityFilter.getInstance().clean(word)
 
   #  Saving the original case and an upper case version of the word.
   words = _.map words, (word) ->

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "tts-swift": {
+      "version": "https://github.com/foxdog-studios/node-tts/tarball/e166d8ce6ecc59e948bb4cd698e69f6b8b7bab0f"
+    }
+  }
+}

@@ -1,7 +1,7 @@
 TTS = (function () {
   var fs = Npm.require('fs');
 
-  var _tts = new Npm.require('tts').Tts();
+  var _tts = new Npm.require('tts-swift').Tts();
 
   var tts = {}
 

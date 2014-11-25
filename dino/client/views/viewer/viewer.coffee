@@ -6,13 +6,10 @@ Template.viewer.rendered = ->
     switch event.which
       when KeyCodes.SPACE
         event.preventDefault()
-        if (isPlaying = Session.get 'playing')
-          DinoSequencer.stop()
-        else
-          DinoSequencer.play()
-        Session.set 'playing', not isPlaying
+        togglePlaying()
       when KeyCodes.R
         event.preventDefault()
+        togglePlaying()
         Meteor.call 'resetLyrics'
   window.addEventListener 'keydown', @_keyupHandler, false
 
@@ -54,4 +51,12 @@ getNextUtterance = ->
   ,
     sort:
       playbackStart: 1
+
+
+togglePlaying = ->
+  if (isPlaying = Session.get 'playing')
+    DinoSequencer.stop()
+  else
+    DinoSequencer.play()
+  Session.set 'playing', not isPlaying
 

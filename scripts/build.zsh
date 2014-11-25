@@ -4,44 +4,27 @@ setopt ERR_EXIT
 setopt NO_UNSET
 
 
-# ==============================================================================
-# = Command line interface                                                     =
-# ==============================================================================
-
-function usage()
-{
-    cat <<-'EOF'
-		Build the Meteor application.
+usage() {
+  cat <<-'EOF'
+		Build dino
 
 		Usage:
 
-		    build.zsh
+		    # build.zsh
 	EOF
-    exit 1
+  exit 1
 }
 
 if [[ $# -ne 0 ]]; then
-    usage
+  usage
 fi
 
-
-# ==============================================================================
-# = Configuration                                                              =
-# ==============================================================================
-
 repo=$(realpath "$(dirname "$(realpath -- $0)")/..")
-bundle_dir=$repo/local/bundle
+build=$repo/local/build
 
-
-# ==============================================================================
-# = Build                                                                      =
-# ==============================================================================
-
-# Remove old build
-rm --force --recursive $bundle_dir
-mkdir --parents $bundle_dir:h
-
-# Create bundle
-cd $repo/src
-meteor bundle --directory $bundle_dir
+rm --force --recursive $build
+cd $repo/dino
+meteor build $build --directory
+cd $build/bundle/programs/server
+npm install
 

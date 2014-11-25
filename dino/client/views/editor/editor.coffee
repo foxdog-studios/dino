@@ -69,6 +69,7 @@ Template.editor.helpers
   placeholder: "Type your lyrics here. I only sing real words and I ignore
                 punctuation."
 
+
 Template.editor.events
   'input .lyrics': (event, template) ->
     updateNumCharacters template
@@ -81,6 +82,7 @@ Template.editor.events
   'submit': (event, template) ->
     event.preventDefault()
     submitLyrics template
+
 
 Template.editor.destroyed = ->
   clearSubmitting()
