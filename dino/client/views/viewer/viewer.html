@@ -1,10 +1,19 @@
 <template name="viewer">
+  {{#if playing}}
+    <div class="mask"></div>
+  {{/if}}
   <div id="viewer">
+    {{#unless playing}}
+      <p class="info">{{info}}</p>
+    {{/unless}}
     {{#if playing}}
       <p class="lyrics">
         {{#each words}}{{> word}}{{/each}}
       </p>
+    {{else}}
+      <p class="progress">{{progress}}</p>
     {{/if}}
+    {{> dino}}
   </div>
 </template>
 

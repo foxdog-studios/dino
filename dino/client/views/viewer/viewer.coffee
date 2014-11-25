@@ -1,16 +1,15 @@
 Template.viewer.rendered = ->
   DinoSequencer.enable()
 
-  Stream.on SING, onSing
-
   Session.set 'playing', false
   @_keyupHandler = (event) ->
     switch event.which
       when KeyCodes.SPACE
         event.preventDefault()
-        onSing()
+        togglePlaying()
       when KeyCodes.R
         event.preventDefault()
+        togglePlaying()
         Meteor.call 'resetLyrics'
   window.addEventListener 'keydown', @_keyupHandler, false
 
@@ -40,7 +39,6 @@ Template.viewer.destroyed = ->
   window.removeEventListener 'keydown', @_keyupHandler, false
   Session.set 'playing'
   DinoSequencer.disable()
-  Stream.removeListener onSing
 
 
 getNextUtterance = ->
@@ -55,7 +53,7 @@ getNextUtterance = ->
       playbackStart: 1
 
 
-onSing = ->
+togglePlaying = ->
   if (isPlaying = Session.get 'playing')
     DinoSequencer.stop()
   else

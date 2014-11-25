@@ -83,14 +83,6 @@ Template.editor.events
     event.preventDefault()
     submitLyrics template
 
-  'click .reset': (event, template) ->
-    Meteor.call 'resetLyrics', (error, result) ->
-      console.error error if error?
-      console.error result if result?
-
-  'click .sing': (event, template) ->
-    Stream.emit SING
-
 
 Template.editor.destroyed = ->
   clearSubmitting()
